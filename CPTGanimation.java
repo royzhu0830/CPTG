@@ -11,11 +11,11 @@ public class CPTGanimation extends JPanel {
 	int intX=0; //for board
 	int intY=0; //for board
 	int n =21;
-	int intDeltaPiece=48; //change this value to make board bigger
+	int intDeltaPiece=83; //change this value to make board bigger
 	int intDeltaBoard=intDeltaPiece+2;
-	Pieces[] Piece = new Pieces[21];
-	int intXPiece[] = new int[21]; 
-	int intYPiece[] = new int[21];
+	Pieces[] Piece = new Pieces[24];
+	int intXPiece[] = new int[24]; 
+	int intYPiece[] = new int[24];
 	boolean blnFirstTime=true;
 	int intLength;
 	int intCounter;
@@ -23,7 +23,7 @@ public class CPTGanimation extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
 		if(blnFirstTime==true) {
-			for (int i=0; i<21; i++) {
+			for (int i=0; i<24; i++) {
 				intXPiece[i]=0;
 				intYPiece[i]=0;
 			}
@@ -53,7 +53,7 @@ public class CPTGanimation extends JPanel {
 		intCounter++;
 		Piece[intCounter]=new Pieces("Serg",intCounter,intXPiece[intCounter],intYPiece[intCounter]);
 		intCounter++;
-		Piece[intCounter]=new Pieces("Spy",-1,intXPiece[intCounter],intYPiece[intCounter]); 
+		Piece[intCounter]=new Pieces("Spy",-1,intXPiece[intCounter],intYPiece[intCounter]);
 		intCounter++;
 		Piece[intCounter]=new Pieces("Spy",-1,intXPiece[intCounter],intYPiece[intCounter]);
 		intCounter++;
@@ -70,6 +70,10 @@ public class CPTGanimation extends JPanel {
 		Piece[intCounter]=new Pieces("Pri6",14,intXPiece[intCounter],intYPiece[intCounter]);
 		intCounter++;
 		Piece[intCounter]=new Pieces("Flag",15,intXPiece[intCounter],intYPiece[intCounter]);
+		intCounter++;
+		for (int i=intCounter; i<24; i++) {
+			Piece[i]=new Pieces("",16,intXPiece[i],intYPiece[i]);
+		}
 		intCounter=0;
 		g.fillRect(0,0,2000,1000);
 		g.setColor(Color.WHITE);
@@ -91,28 +95,28 @@ public class CPTGanimation extends JPanel {
 		}
 		g.setColor(Color.BLACK);
 		if (blnFirstTime==true) {
-			for (int i=1; i<21; i++) { //i variable decides which piece and where it is                                                                                                              b
+			for (int i=1; i<24; i++) { //i variable decides which piece and where it is                                                                                                              b
 				if (i==1) {
-					intYPiece[0]=250;
+					intYPiece[0]=intDeltaBoard*5;
 					intXPiece[0]=0;
 					g.drawString(Piece[0].getStrPiece(),intXPiece[0],intYPiece[0]);
 				}
 			
 				intXPiece[i]=intXPiece[i-1]+intDeltaBoard;
-				if(i==5 || i==13){
+				if(i==8 || i==16){
 					intXPiece[i]=0;
 				}	
-				if (i<5) {
-					intYPiece[i]=250;
-				}else if (i>=13){
-					intYPiece[i]=350;
+				if (i<8) {
+					intYPiece[i]=intDeltaBoard*5;
+				}else if (i>=16){
+					intYPiece[i]=intDeltaBoard*6;
 				}else {
-					intYPiece[i]=300;
+					intYPiece[i]=intDeltaBoard*7;
 				}
 				g.drawString(Piece[i].getStrPiece(),intXPiece[i],intYPiece[i]);
 			}
 		}else if (blnFirstTime==false) {//fix identation if it works
-			for (int i=0; i<21; i++) {
+			for (int i=0; i<24; i++) {
 				g.drawString(Piece[i].getStrPiece(),intXPiece[i],intYPiece[i]);
 			}
 			

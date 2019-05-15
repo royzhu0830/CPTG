@@ -4,12 +4,15 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
-//game of the generals
+//game of the generals, 
+/*ISSUES:
+when click anywhere, automatic swap
+*/
 public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
 	JFrame theframe;
 	CPTGanimation thepanel;
 	Timer thetimer;
-	int intTemp;
+	int intTemp=-1;
 	int intTemp2;
 	int intTemp3;
 	int intTempX;
@@ -18,7 +21,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int i=0;
 	int intRndNumbr;
 	String strTempPiece;
-	boolean blnSelected=true;
 	
 	
 	public void actionPerformed(ActionEvent e) {
@@ -29,9 +31,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	}
 	public void mouseDragged(MouseEvent e) {
 		
-			
-		thepanel.intXPiece[intTemp]=e.getX();
-		thepanel.intYPiece[intTemp]=e.getY();
+		if(intTemp!=-1) {
+			thepanel.intXPiece[intTemp]=e.getX();
+			thepanel.intYPiece[intTemp]=e.getY();
+		}
 	}
 	public void mouseMoved (MouseEvent e) {
 		
@@ -54,12 +57,13 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		i=0;
 	}
 	public void mouseReleased(MouseEvent w) {
-		while (i<21) {
+		while (i<24) {
 			if (thepanel.intXPiece[i]<=w.getX() && thepanel.intXPiece[i] + thepanel.intDeltaBoard>w.getX() && thepanel.intYPiece[i]<=w.getY() && thepanel.intYPiece[i]+thepanel.intDeltaBoard>w.getY()) {
 				if (intTemp2==-1) {
 					intTemp2=i;
 				}else {
 					intTemp3=i;
+					break;
 				}
 			}
 			i++;
@@ -67,18 +71,18 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		if (intTemp3!=-1 && intTemp==intTemp2) {
 			intTemp2=intTemp3;
 		}
+		if (intTemp2!=-1 && intTemp!=-1) {
+			thepanel.intXPiece[intTemp]=thepanel.intXPiece[intTemp2];
+			thepanel.intYPiece[intTemp]=thepanel.intYPiece[intTemp2];
+			thepanel.intXPiece[intTemp2]=intTempX;
+			thepanel.intYPiece[intTemp2]=intTempY;
+		}
 		i=0;
-		thepanel.intXPiece[intTemp]=thepanel.intXPiece[intTemp2];
-		thepanel.intYPiece[intTemp]=thepanel.intYPiece[intTemp2];
-		thepanel.intXPiece[intTemp2]=intTempX;
-		thepanel.intYPiece[intTemp2]=intTempY;
 		intTemp=-1;
 		intTemp2=-1;
 		intTemp3=-1;
 		intTempX=-1;
 		intTempY=-1;
-		blnSelected=true;
-		
 	}
 	public void mouseExited(MouseEvent e) {
 		
@@ -101,7 +105,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thepanel.setPreferredSize(new Dimension(1040,680));
 		thepanel.addMouseListener(this);
 		thepanel.addMouseMotionListener(this);
-		
 		
 		theframe = new JFrame("Game of Generals");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
