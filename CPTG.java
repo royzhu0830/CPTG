@@ -1,0 +1,120 @@
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
+import java.awt.event.*;
+import javax.swing.event.*;
+
+//game of the generals
+public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
+	JFrame theframe;
+	CPTGanimation thepanel;
+	Timer thetimer;
+	int intTemp;
+	int intTemp2;
+	int intTemp3;
+	int intTempX;
+	int intTempY;
+	int intLength;
+	int i=0;
+	int intRndNumbr;
+	String strTempPiece;
+	boolean blnSelected=true;
+	
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==thetimer) {
+			thepanel.repaint();
+			
+		}
+	}
+	public void mouseDragged(MouseEvent e) {
+		
+			
+		thepanel.intXPiece[intTemp]=e.getX();
+		thepanel.intYPiece[intTemp]=e.getY();
+	}
+	public void mouseMoved (MouseEvent e) {
+		
+	}
+	public void mouseClicked(MouseEvent e) {
+	
+	}
+	public void mousePressed (MouseEvent e) {
+		while (i<21) {
+			
+			if (thepanel.intXPiece[i]<=e.getX() && thepanel.intXPiece[i] + thepanel.intDeltaPiece>e.getX() && thepanel.intYPiece[i]<=e.getY() && thepanel.intYPiece[i]+thepanel.intDeltaPiece>e.getY()) {
+				intTemp=i;
+				thepanel.blnFirstTime=false;
+				intTempX=thepanel.intXPiece[intTemp];
+				intTempY=thepanel.intYPiece[intTemp];
+				break;
+			}
+			i++;
+		}
+		i=0;
+	}
+	public void mouseReleased(MouseEvent w) {
+		while (i<21) {
+			if (thepanel.intXPiece[i]<=w.getX() && thepanel.intXPiece[i] + thepanel.intDeltaBoard>w.getX() && thepanel.intYPiece[i]<=w.getY() && thepanel.intYPiece[i]+thepanel.intDeltaBoard>w.getY()) {
+				if (intTemp2==-1) {
+					intTemp2=i;
+				}else {
+					intTemp3=i;
+				}
+			}
+			i++;
+		}
+		if (intTemp3!=-1 && intTemp==intTemp2) {
+			intTemp2=intTemp3;
+		}
+		i=0;
+		thepanel.intXPiece[intTemp]=thepanel.intXPiece[intTemp2];
+		thepanel.intYPiece[intTemp]=thepanel.intYPiece[intTemp2];
+		thepanel.intXPiece[intTemp2]=intTempX;
+		thepanel.intYPiece[intTemp2]=intTempY;
+		intTemp=-1;
+		intTemp2=-1;
+		intTemp3=-1;
+		intTempX=-1;
+		intTempY=-1;
+		blnSelected=true;
+		
+	}
+	public void mouseExited(MouseEvent e) {
+		
+	}
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	public void keyPressed(KeyEvent e) {
+		
+	}
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	public void keyTyped(KeyEvent e) {
+		
+	}
+	public CPTG () {
+		thepanel = new CPTGanimation();
+		thepanel.setLayout(null);
+		thepanel.setPreferredSize(new Dimension(1040,680));
+		thepanel.addMouseListener(this);
+		thepanel.addMouseMotionListener(this);
+		
+		
+		theframe = new JFrame("Game of Generals");
+		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		thetimer = new Timer(1000/60,this);
+		thetimer.start();
+		
+		theframe.setContentPane(thepanel);
+		theframe.pack();
+		theframe.setResizable(true);
+		theframe.setVisible(true);
+	}
+	public static void main(String[] args) {
+		new CPTG();
+	}
+}
