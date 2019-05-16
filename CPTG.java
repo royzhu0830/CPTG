@@ -6,7 +6,7 @@ import javax.swing.event.*;
 
 //game of the generals, 
 /*ISSUES:
-when click anywhere, automatic swap of 5G
+when click anywhere, automatic swap of 5G testing 123
 */
 public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
 	JFrame theframe;

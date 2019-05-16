@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.event.*;
 import java.util.*;
 
+//testing 123
+
 public class CPTGanimation extends JPanel {
 	int intXBoard[][]=new int[8][8]; //for board
 	int intYBoard[][]=new int[8][8]; 

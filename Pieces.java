@@ -1,4 +1,4 @@
-
+//testing 123
 public class Pieces {
 	//properties
 	public String strPiece;
