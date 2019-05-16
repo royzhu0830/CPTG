@@ -6,12 +6,13 @@ import javax.swing.event.*;
 
 //game of the generals, 
 /*ISSUES:
-when click anywhere, automatic swap
+when click anywhere, automatic swap of 5G
 */
 public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
 	JFrame theframe;
 	CPTGanimation thepanel;
 	Timer thetimer;
+	JButton thebutton;
 	int intTemp=-1;
 	int intTemp2;
 	int intTemp3;
@@ -26,8 +27,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
-			
 		}
+		if (e.getSource()==thebutton) {
+			thepanel.remove(thebuton);
+		}
+			
 	}
 	public void mouseDragged(MouseEvent e) {
 		
@@ -109,8 +113,14 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theframe = new JFrame("Game of Generals");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		thebutton = new JButton("Ready!");
+		thebutton.setBounds(800,300,100,100);
+		thebutton.addActionListener(this);
+		
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();
+		
+		thepanel.add(thebutton);
 		
 		theframe.setContentPane(thepanel);
 		theframe.pack();
