@@ -22,6 +22,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int i=0;
 	int intRndNumbr;
 	String strTempPiece;
+	String strEnemyX="";
+	String strEnemyY="";
+	SuperSocketMaster ssm;
 	
 	
 	public void actionPerformed(ActionEvent e) {
@@ -29,7 +32,27 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			thepanel.repaint();
 		}
 		if (e.getSource()==thebutton) {
-			thepanel.remove(thebuton);
+			thepanel.remove(thebutton);
+			thepanel.blnReady=true;
+			i=0;
+			while (i<21) {
+				ssm.sendText(String.valueOf(thepanel.Piece[i].getIntX()));
+				ssm.sendText(String.valueOf(thepanel.Piece[i].getIntY()));
+				strEnemyX=ssm.readText();
+				strEnemyY=ssm.readText();
+				try{
+					thepanel.intXPiece[i]=Integer.parseInt(strEnemyX);
+					thepanel.intYPiece[i]=Integer.parseInt(strEnemyY);
+				}catch(NumberFormatException n) {
+					thepanel.intXPiece[i]=0;
+					System.out.println("X error");
+					thepanel.intYPiece[i]=0;
+					System.out.println("Y error");
+				}
+			}
+			
+			i=0;
+			
 		}
 			
 	}
@@ -72,21 +95,25 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			}
 			i++;
 		}
-		if (intTemp3!=-1 && intTemp==intTemp2) {
-			intTemp2=intTemp3;
+		if (thepanel.blnReady==false) {
+			if (intTemp3!=-1 && intTemp==intTemp2) {
+				intTemp2=intTemp3;
+			}
+			if (intTemp2!=-1 && intTemp!=-1) {
+				thepanel.intXPiece[intTemp]=thepanel.intXPiece[intTemp2];
+				thepanel.intYPiece[intTemp]=thepanel.intYPiece[intTemp2];
+				thepanel.intXPiece[intTemp2]=intTempX;
+				thepanel.intYPiece[intTemp2]=intTempY;
+			}
+			i=0;
+			intTemp=-1;
+			intTemp2=-1;
+			intTemp3=-1;
+			intTempX=-1;
+			intTempY=-1;
+		}else{
+			//put restriction on piece movement in game here please sirsssssssss
 		}
-		if (intTemp2!=-1 && intTemp!=-1) {
-			thepanel.intXPiece[intTemp]=thepanel.intXPiece[intTemp2];
-			thepanel.intYPiece[intTemp]=thepanel.intYPiece[intTemp2];
-			thepanel.intXPiece[intTemp2]=intTempX;
-			thepanel.intYPiece[intTemp2]=intTempY;
-		}
-		i=0;
-		intTemp=-1;
-		intTemp2=-1;
-		intTemp3=-1;
-		intTempX=-1;
-		intTempY=-1;
 	}
 	public void mouseExited(MouseEvent e) {
 		
@@ -126,6 +153,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theframe.pack();
 		theframe.setResizable(true);
 		theframe.setVisible(true);
+		
+		ssm=new SuperSocketMaster(3000,this);
+		ssm.connect();
 	}
 	public static void main(String[] args) {
 		new CPTG();

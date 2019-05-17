@@ -7,18 +7,23 @@ public class Pieces {
 	public int intY;
 	
 	//methods
-	public void setStrPiece(String strPiece) {
-		this.strPiece=strPiece;
-	}
 	public String getStrPiece() {
 		return strPiece;
 	}
-	
-	public void setIntRank(int intRank) {
-		this.intRank=intRank;
-	}
 	public int getIntRank() {
 		return intRank;
+	}
+	public int getIntX() {
+		return intX;
+	}
+	public int getIntY(){
+		return intY;
+	}
+	public void move(){
+		
+	}
+	public void kill(){
+		
 	}
 	
 	//constructor

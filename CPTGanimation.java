@@ -18,7 +18,11 @@ public class CPTGanimation extends JPanel {
 	Pieces[] Piece = new Pieces[24];
 	int intXPiece[] = new int[24]; 
 	int intYPiece[] = new int[24];
+	Pieces[] EnPiece = new Pieces[24];
+	int intEnXPiece[] = new int[24];
+	int intEnYPiece[] = new int[24];
 	boolean blnFirstTime=true;
+	boolean blnReady=false;
 	int intLength;
 	int intCounter;
 	
@@ -77,6 +81,52 @@ public class CPTGanimation extends JPanel {
 			Piece[i]=new Pieces("",16,intXPiece[i],intYPiece[i]);
 		}
 		intCounter=0;
+		EnPiece[intCounter]=new Pieces("5G",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]); //all pieces, highest to lowest rank, spy and priv. outside of order
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("4G",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("3G",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("2G",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("1G",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Col",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("L. Col",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Maj",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Cap",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("1 L.",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("2 L.",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Serg",intCounter,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Spy",-1,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Spy",-1,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri1",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri2",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri3",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri4",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri5",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Pri6",14,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		EnPiece[intCounter]=new Pieces("Flag",15,intEnXPiece[intCounter],intEnYPiece[intCounter]);
+		intCounter++;
+		for (int i=intCounter; i<24; i++) {
+			EnPiece[i]=new Pieces("",16,intEnXPiece[i],intEnYPiece[i]);
+		}
+		intCounter=0;
 		g.fillRect(0,0,2000,1000);
 		g.setColor(Color.WHITE);
 		
@@ -117,10 +167,14 @@ public class CPTGanimation extends JPanel {
 				}
 				g.drawString(Piece[i].getStrPiece(),intXPiece[i],intYPiece[i]);
 			}
+			
+			
 		}else if (blnFirstTime==false) {//fix identation if it works
 			for (int i=0; i<24; i++) {
 				g.drawString(Piece[i].getStrPiece(),intXPiece[i],intYPiece[i]);
+				g.drawString(EnPiece[i].getStrPiece(),intEnXPiece[i],intEnYPiece[i]);
 			}
+			
 			
 		}
 			
