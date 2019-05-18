@@ -10,14 +10,21 @@ public class Pieces {
 	public String getStrPiece() {
 		return strPiece;
 	}
+	
 	public int getIntRank() {
 		return intRank;
 	}
 	public int getIntX() {
 		return intX;
 	}
+	public void setIntX(int intX) {
+		this.intX=intX;
+	}
 	public int getIntY(){
 		return intY;
+	}
+	public void setIntY(int intY) {
+		this.intY=intY;
 	}
 	public void move(){
 		
@@ -30,8 +37,8 @@ public class Pieces {
 	public Pieces(String strPiece,int intRank, int intX, int intY) {
 		this.strPiece = strPiece;
 		this.intRank = intRank;
-		this.intX=intX;
-		this.intY=intY;
+		//this.intX=intX;
+		//this.intY=intY;
 	}
 }
 	
