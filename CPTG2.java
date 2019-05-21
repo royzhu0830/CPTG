@@ -21,11 +21,16 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	int intLength;
 	int i=0;
 	int intRndNumbr;
+	int intSplitX=0;
+	int intSplitY=0;
+	int intEX;
+	int intEY;
 	String strReady="not ready";
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
-	String strSplit[];
+	String strSplit[]=new String[2];
+	String strSend="";
 	SuperSocketMaster ssm;
 	
 	
@@ -36,40 +41,56 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
 			thepanel.blnReady=true;
-		}else if (e.getSource()==ssm) {
+			System.out.println(ssm.getMyAddress());
+			ssm.sendText(String.valueOf(thepanel.Piece[0].getIntX())+","+String.valueOf(thepanel.Piece[0].getIntY()));
 			i=0;
+		}else if (e.getSource()==ssm) {
 			while (i<21 && thepanel.blnReady==true) {
-				ssm.sendText(String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY()));
-				strSplit=ssm.readText().split("");
-				System.out.println(strSplit[0] + " " + strSplit[1]);
+				strSend=String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY());
+				System.out.println(String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY()));
+				ssm.sendText(strSend);
+				strSend=null;
+				//System.out.println(ssm.readText());
+				strSplit=ssm.readText().split(",");
+				System.out.println(strSplit[0] + " " + strSplit[1]+ " "+thepanel.EnPiece[i].getStrPiece());
 				try{
-					thepanel.EnPiece[i].setIntX(Integer.parseInt(strSplit[0]));
-					thepanel.EnPiece[i].setIntY(Integer.parseInt(strSplit[1]));
+					intEX=Integer.parseInt(strSplit[0]);
+					intEY=Integer.parseInt(strSplit[1]);
 				}catch(NumberFormatException n) {
 					thepanel.EnPiece[i].setIntX(0);
 					thepanel.EnPiece[i].setIntY(0);
 				
 				}
 				// code for when ssm is fixed; used to determine location of enemy pieces.
-				if (thepanel.EnPiece[i].getIntY()==thepanel.intDeltaBoard*5) {
+				if (intEY==thepanel.intDeltaBoard*5) {
 					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*2);
-				}else if (thepanel.EnPiece[i].getIntY()==thepanel.intDeltaBoard*6) {
+				}else if (intEY==thepanel.intDeltaBoard*6) {
 					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*1);
-				}else if (thepanel.EnPiece[i].getIntY()==thepanel.intDeltaBoard*7) {
+				}else if (intEY==thepanel.intDeltaBoard*7) {
 					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*0);
 				}
-				for (int k=0; k<3; k++) {
-					for (int j=0; j<8; j++) {
-						for (int h=0; h<8; h++) {
-							if (j+h==7) {
-								thepanel.EnPiece[i].setIntX(thepanel.intXBoard[k][j]);
-							}
-						}
-					}
+				if(intEX==thepanel.intDeltaBoard*0) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
+				}else if(intEX==thepanel.intDeltaBoard*1) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
+				}else if(intEX==thepanel.intDeltaBoard*2) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
+				}else if(intEX==thepanel.intDeltaBoard*3) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
+				}else if(intEX==thepanel.intDeltaBoard*4) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
+				}else if(intEX==thepanel.intDeltaBoard*5) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
+				}else if(intEX==thepanel.intDeltaBoard*6) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+				}else if(intEX==thepanel.intDeltaBoard*7) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*0);
 				}
+				i++;
+				strSplit[0]=null;
+				strSplit[1]=null;
 			}
 		}
-		
 	}
 	public void mouseDragged(MouseEvent e) {
 		
@@ -169,7 +190,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("990.241.111.71",3000,this);
+		ssm=new SuperSocketMaster("10.8.177.216",3000,this);
 		ssm.connect();
 	}
 	public static void main(String[] args) {

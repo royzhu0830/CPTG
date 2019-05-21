@@ -166,7 +166,7 @@ public class CPTGanimation extends JPanel {
 		}else if (blnFirstTime==false) {//fix identation if it works
 			for (int i=0; i<24; i++) {
 				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
-				//g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
+				g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
 			}
 			
 			
