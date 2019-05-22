@@ -24,6 +24,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	int intTempY;
 	int intLength;
 	int i=0;
+	int j=0;
 	int intRndNumbr;
 	int intSplitX=0;
 	int intSplitY=0;
@@ -34,6 +35,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	String strEnemyX="";
 	String strEnemyY="";
 	String strSplit[] = new String[2];
+	StringBuilder strCoordinates = new StringBuilder(21);
 	String strSend="";
 	SuperSocketMaster ssm;
 	
@@ -49,25 +51,25 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			//thepanel.add(thearea);
 			thepanel.add(thescroll);
 			thepanel.blnReady=true;
-			ssm.sendText(String.valueOf(thepanel.Piece[0].getIntX())+","+String.valueOf(thepanel.Piece[0].getIntY()));
+			i=0;
+			while (i<21) {
+				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
+				i++;
+			}
+			strSend=strCoordinates.toString();
+			ssm.sendText(strSend);
 			i=0;
 		}else if (e.getSource() == thesendbutton){
 			ssm.sendText(thetextfield.getText()); 
 			thearea.append(thetextfield.getText() + "\n");
+			
 		}else if (e.getSource()==ssm) {
 			thearea.append(ssm.readText() + "\n");
-			
-			while (i<21 && thepanel.blnReady==true) {
-				strSend=String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY());
-				System.out.println(String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY()));
-				ssm.sendText(strSend);
-				strSend=null;
-				//System.out.println(ssm.readText());
-				strSplit=ssm.readText().split(",");
-				System.out.println(strSplit[0] + " " + strSplit[1]+ " "+thepanel.EnPiece[i].getStrPiece());
+			strSplit=ssm.readText().split(",");
+			while (i<21) {
 				try{
-					intEX=Integer.parseInt(strSplit[0]);
-					intEY=Integer.parseInt(strSplit[1]);
+					intEX=Integer.parseInt(strSplit[j]);
+					intEY=Integer.parseInt(strSplit[j+1]);
 				}catch(NumberFormatException n) {
 					thepanel.EnPiece[i].setIntX(0);
 					thepanel.EnPiece[i].setIntY(0);
@@ -99,6 +101,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*0);
 				}
 				i++;
+				j=j+2;
 				strSplit[0]=null;
 				strSplit[1]=null;
 			}
@@ -153,15 +156,15 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.Piece[intTemp2].setIntX(intTempX);
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
-			i=0;
-			intTemp=-1;
-			intTemp2=-1;
-			intTemp3=-1;
-			intTempX=-1;
-			intTempY=-1;
 		}else{
-			//put restriction on piece movement in game here please sirsssssssss
+		//put restriction on piece movement in game here please sirsssssssss
 		}
+		i=0;
+		intTemp=-1;
+		intTemp2=-1;
+		intTemp3=-1;
+		intTempX=-1;
+		intTempY=-1;
 	}
 	public void mouseExited(MouseEvent e) {
 		
@@ -220,12 +223,12 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm = new SuperSocketMaster("10.112.42.107",1337,this);
+		ssm=new SuperSocketMaster("192.168.0.17",1337,this);
 		ssm.connect();
+		System.out.println(ssm.getMyAddress());
 	}
 	public static void main(String[] args) {
 		new CPTG2();
 	}
 }
-
-
+//"192.168.0.17"

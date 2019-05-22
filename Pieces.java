@@ -9,6 +9,8 @@ public class Pieces {
 	public int intX;
 	/**Y-coordinate of the piece*/
 	public int intY;
+	/**number corresponding to rank of enemy piece*/
+	public int intEnRank;
 	
 	//methods
 	/**gets the name of the piece*/
@@ -36,7 +38,7 @@ public class Pieces {
 		this.intY=intY;
 	}
 	/**determines outcome of conflict*/
-	public void kill(int intRank){
+	public void kill(int intRank, int intEnRank){
 		
 	}
 	
