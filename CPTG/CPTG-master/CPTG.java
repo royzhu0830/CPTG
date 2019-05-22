@@ -1,0 +1,198 @@
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
+import java.awt.event.*;
+import javax.swing.event.*;
+
+//game of the generals, 
+/*ISSUES:
+when click anywhere, automatic swap of 5G testing 123
+*/
+public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
+	JFrame theframe;
+	CPTGanimation thepanel;
+	Timer thetimer;
+	JButton thebutton;
+	int intTemp=-1;
+	int intTemp2;
+	int intTemp3;
+	int intTempX;
+	int intTempY;
+	int intLength;
+	int i=0;
+	int intRndNumbr;
+	int intSplitX=0;
+	int intSplitY=0;
+	int intEX;
+	int intEY;
+	String strReady="not ready";
+	String strTempPiece;
+	String strEnemyX="";
+	String strEnemyY="";
+	String strSplit[] = new String[2];
+	String strSend="";
+	SuperSocketMaster ssm;
+	
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==thetimer) {
+			thepanel.repaint();
+		}
+		if (e.getSource()==thebutton) {
+			thepanel.remove(thebutton);
+			thepanel.blnReady=true;
+			ssm.sendText(String.valueOf(thepanel.Piece[0].getIntX())+","+String.valueOf(thepanel.Piece[0].getIntY()));
+			i=0;
+		}else if (e.getSource()==ssm) {
+			while (i<21 && thepanel.blnReady==true) {
+				strSend=String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY());
+				System.out.println(String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY()));
+				ssm.sendText(strSend);
+				strSend=null;
+				//System.out.println(ssm.readText());
+				strSplit=ssm.readText().split(",");
+				System.out.println(strSplit[0] + " " + strSplit[1]+ " "+thepanel.EnPiece[i].getStrPiece());
+				try{
+					intEX=Integer.parseInt(strSplit[0]);
+					intEY=Integer.parseInt(strSplit[1]);
+				}catch(NumberFormatException n) {
+					thepanel.EnPiece[i].setIntX(0);
+					thepanel.EnPiece[i].setIntY(0);
+				
+				}
+				// code for when ssm is fixed; used to determine location of enemy pieces.
+				if (intEY==thepanel.intDeltaBoard*5) {
+					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*2);
+				}else if (intEY==thepanel.intDeltaBoard*6) {
+					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*1);
+				}else if (intEY==thepanel.intDeltaBoard*7) {
+					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*0);
+				}
+				if(intEX==thepanel.intDeltaBoard*0) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
+				}else if(intEX==thepanel.intDeltaBoard*1) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
+				}else if(intEX==thepanel.intDeltaBoard*2) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
+				}else if(intEX==thepanel.intDeltaBoard*3) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
+				}else if(intEX==thepanel.intDeltaBoard*4) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
+				}else if(intEX==thepanel.intDeltaBoard*5) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
+				}else if(intEX==thepanel.intDeltaBoard*6) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+				}else if(intEX==thepanel.intDeltaBoard*7) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*0);
+				}
+				i++;
+				strSplit[0]=null;
+				strSplit[1]=null;
+			}
+		}
+	}
+	public void mouseDragged(MouseEvent e) {
+		
+		if(intTemp!=-1) {
+			thepanel.Piece[intTemp].setIntX(e.getX());
+			thepanel.Piece[intTemp].setIntY(e.getY());
+		}
+	}
+	public void mouseMoved (MouseEvent e) {
+		
+	}
+	public void mouseClicked(MouseEvent e) {
+	
+	}
+	public void mousePressed (MouseEvent e) {
+		while (i<21) {
+			
+			if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+				intTemp=i;
+				thepanel.blnFirstTime=false;
+				intTempX=thepanel.Piece[intTemp].getIntX();
+				intTempY=thepanel.Piece[intTemp].getIntY();
+				break;
+			}
+			i++;
+		}
+		i=0;
+	}
+	public void mouseReleased(MouseEvent e) {
+		while (i<24) {
+				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+				if (intTemp2==-1) {
+					intTemp2=i;
+				}else {
+					intTemp3=i;
+					break;
+				}
+			}
+			i++;
+		}
+		if (thepanel.blnReady==false) {
+			if (intTemp3!=-1 && intTemp==intTemp2) {
+				intTemp2=intTemp3;
+			}
+			if (intTemp2!=-1 && intTemp!=-1) {
+				thepanel.Piece[intTemp].setIntX(thepanel.Piece[intTemp2].getIntX());
+				thepanel.Piece[intTemp].setIntY(thepanel.Piece[intTemp2].getIntY());
+				thepanel.Piece[intTemp2].setIntX(intTempX);
+				thepanel.Piece[intTemp2].setIntY(intTempY);
+			}
+			i=0;
+			intTemp=-1;
+			intTemp2=-1;
+			intTemp3=-1;
+			intTempX=-1;
+			intTempY=-1;
+		}else{
+			//put restriction on piece movement in game here please sirsssssssss
+		}
+	}
+	public void mouseExited(MouseEvent e) {
+		
+	}
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	public void keyPressed(KeyEvent e) {
+		
+	}
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	public void keyTyped(KeyEvent e) {
+		
+	}
+	public CPTG () {
+		thepanel = new CPTGanimation();
+		thepanel.setLayout(null);
+		thepanel.setPreferredSize(new Dimension(1040,680));
+		thepanel.addMouseListener(this);
+		thepanel.addMouseMotionListener(this);
+		
+		theframe = new JFrame("Game of Generals");
+		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		thebutton = new JButton("Ready!");
+		thebutton.setBounds(800,300,100,100);
+		thebutton.addActionListener(this);
+		
+		thetimer = new Timer(1000/60,this);
+		thetimer.start();
+		
+		thepanel.add(thebutton);
+		
+		theframe.setContentPane(thepanel);
+		theframe.pack();
+		theframe.setResizable(true);
+		theframe.setVisible(true);
+		
+		ssm=new SuperSocketMaster(3000,this);
+		ssm.connect();
+	}
+	public static void main(String[] args) {
+		new CPTG();
+	}
+}
