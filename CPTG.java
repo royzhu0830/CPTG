@@ -13,6 +13,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	CPTGanimation thepanel;
 	Timer thetimer;
 	JButton thebutton;
+	JButton thesendbutton; 
+	JScrollPane thescroll; 
+	JTextField thetextfield; 
+	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
 	int intTemp3;
@@ -40,10 +44,19 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		}
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
+			thepanel.add(thesendbutton);
+			thepanel.add(thetextfield); 
+			//thepanel.add(thearea);
+			thepanel.add(thescroll);
 			thepanel.blnReady=true;
 			ssm.sendText(String.valueOf(thepanel.Piece[0].getIntX())+","+String.valueOf(thepanel.Piece[0].getIntY()));
 			i=0;
+		}else if (e.getSource() == thesendbutton){
+			ssm.sendText(thetextfield.getText()); 
+			thearea.append(thetextfield.getText() + "\n");
 		}else if (e.getSource()==ssm) {
+			thearea.append(ssm.readText() + "\n");
+			
 			while (i<21 && thepanel.blnReady==true) {
 				strSend=String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY());
 				System.out.println(String.valueOf(thepanel.Piece[i].getIntX())+","+String.valueOf(thepanel.Piece[i].getIntY()));
@@ -177,7 +190,25 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		
 		thebutton = new JButton("Ready!");
 		thebutton.setBounds(800,300,100,100);
-		thebutton.addActionListener(this);
+		thebutton.addActionListener(this); 
+		
+		thesendbutton = new JButton("Send"); 
+		thesendbutton.setSize(100,50); 
+		thesendbutton.setLocation(800,600); 
+		thesendbutton.addActionListener(this); 
+		
+		thetextfield = new JTextField("");
+		thetextfield.setSize(325,75); 
+		thetextfield.setLocation(700,500);
+		thetextfield.addActionListener(this);
+		
+		thearea = new JTextArea(""); 
+		thearea.setSize(325,300); 
+		thearea.setLocation(700,175);
+		
+		thescroll = new JScrollPane(thearea);
+		thescroll.setSize(325,300); 
+		thescroll.setLocation(700,175);
 		
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();
@@ -189,8 +220,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster(3000,this);
+		ssm=new SuperSocketMaster(1337,this);
 		ssm.connect();
+		System.out.println(ssm.getMyAddress());
 	}
 	public static void main(String[] args) {
 		new CPTG();
