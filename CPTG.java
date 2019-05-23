@@ -30,13 +30,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int intSplitY=0;
 	int intEX;
 	int intEY;
-	String strReady="not ready";
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
 	String strSplit[] = new String[2];
 	StringBuilder strCoordinates = new StringBuilder(21);
-	String strSend="";
 	SuperSocketMaster ssm;
 	
 	
@@ -56,8 +54,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
 				i++;
 			}
-			strSend=strCoordinates.toString();
-			ssm.sendText(strSend);
+			ssm.sendText(strCoordinates.toString());
 			i=0;
 		}else if (e.getSource() == thesendbutton){
 			ssm.sendText(thetextfield.getText()); 
@@ -137,7 +134,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		while (i<24) {
+		while (i<27) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 				if (intTemp2==-1) {
 					intTemp2=i;

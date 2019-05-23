@@ -8,15 +8,15 @@ import java.util.*;
 //testing 123
 
 public class CPTGanimation extends JPanel {
-	int intXBoard[][]=new int[8][8]; //for board
-	int intYBoard[][]=new int[8][8]; 
+	int intXBoard[][]=new int[8][9]; //for board
+	int intYBoard[][]=new int[8][9]; 
 	int intX=0; //for board
 	int intY=0; //for board
 	
 	int intDeltaPiece=83; //change this value to make board bigger
 	int intDeltaBoard=intDeltaPiece+2;
-	Pieces[] Piece = new Pieces[24];
-	Pieces[] EnPiece = new Pieces[24];
+	Pieces[] Piece = new Pieces[27];
+	Pieces[] EnPiece = new Pieces[27];
 	boolean blnFirstTime=true;
 	boolean blnReady=false;
 	boolean blnEnReady=false;
@@ -29,7 +29,7 @@ public class CPTGanimation extends JPanel {
 		g.setColor(Color.WHITE);
 		
 		for (int i=0; i<8; i++) {
-			for (int j=0; j<8; j++) {
+			for (int j=0; j<9; j++) {
 				intXBoard[i][j]=intX;
 				intYBoard[i][j]=intY;
 				intX=intX+intDeltaBoard;
@@ -39,7 +39,7 @@ public class CPTGanimation extends JPanel {
 		}
 		intY=0;
 		for (int i=0; i<8; i++) {
-			for (int j=0; j<8; j++) {
+			for (int j=0; j<9; j++) {
 				g.fillRect(intXBoard[i][j],intYBoard[i][j],intDeltaPiece,intDeltaPiece);
 			}
 		}
@@ -88,7 +88,7 @@ public class CPTGanimation extends JPanel {
 			intCounter++;
 			Piece[intCounter]=new Pieces("Flag",15,0,0);
 			intCounter++;
-			for (int i=intCounter; i<24; i++) {
+			for (int i=intCounter; i<27; i++) {
 				Piece[i]=new Pieces("",16,0,0);
 			}	
 			intCounter=0;
@@ -134,23 +134,23 @@ public class CPTGanimation extends JPanel {
 			intCounter++;
 			EnPiece[intCounter]=new Pieces("Flag",15,0,0);
 			intCounter++;
-			for (int i=intCounter; i<24; i++) {
+			for (int i=intCounter; i<27; i++) {
 				EnPiece[i]=new Pieces("",16,0,0);
 			}	
 			intCounter=0;
-			for (int i=1; i<24; i++) { //i variable decides which piece and where it is                                                                                                              b
+			for (int i=1; i<27; i++) { //i variable decides which piece and where it is                                                                                                              b
 				if (i==1) {
 					Piece[0].setIntY(intDeltaBoard*5);
 					Piece[0].setIntX(0);
 					g.drawString(Piece[0].getStrPiece(),Piece[0].getIntX(),Piece[0].getIntY());
 				}
 				Piece[i].setIntX(Piece[i-1].getIntX()+intDeltaBoard);
-				if(i==8 || i==16){
+				if(i==9 || i==17){
 					Piece[i].setIntX(0);
 				}	
-				if (i<8) {
+				if (i<9) {
 					Piece[i].setIntY(intDeltaBoard*5);
-				}else if (i>=16){
+				}else if (i>=17){
 					Piece[i].setIntY(intDeltaBoard*6);
 				}else {
 					Piece[i].setIntY(intDeltaBoard*7);
@@ -158,7 +158,7 @@ public class CPTGanimation extends JPanel {
 				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
 			}
 		}else if (blnFirstTime==false) {//fix identation if it works
-			for (int i=0; i<24; i++) {
+			for (int i=0; i<21; i++) {
 				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
 				g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
 			}

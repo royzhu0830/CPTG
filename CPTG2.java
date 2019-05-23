@@ -30,13 +30,11 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	int intSplitY=0;
 	int intEX;
 	int intEY;
-	String strReady="not ready";
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
-	String strSplit[] = new String[2];
+	String strSplit[];
 	StringBuilder strCoordinates = new StringBuilder(21);
-	String strSend="";
 	SuperSocketMaster ssm;
 	
 	
@@ -51,13 +49,13 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			//thepanel.add(thearea);
 			thepanel.add(thescroll);
 			thepanel.blnReady=true;
+			
 			i=0;
 			while (i<21) {
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
 				i++;
-			}
-			strSend=strCoordinates.toString();
-			ssm.sendText(strSend);
+			} 
+			ssm.sendText(strCoordinates.toString());
 			i=0;
 		}else if (e.getSource() == thesendbutton){
 			ssm.sendText(thetextfield.getText()); 
@@ -109,7 +107,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	}
 	public void mouseDragged(MouseEvent e) {
 		
-		if(intTemp!=-1) {
+		if(intTemp!=-1 && thepanel.blnReady==false) {
 			thepanel.Piece[intTemp].setIntX(e.getX());
 			thepanel.Piece[intTemp].setIntY(e.getY());
 		}
@@ -223,7 +221,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("192.168.0.17",1337,this);
+		ssm=new SuperSocketMaster("10.8.12.225",1337,this);
 		ssm.connect();
 		System.out.println(ssm.getMyAddress());
 	}

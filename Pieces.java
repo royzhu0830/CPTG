@@ -38,7 +38,7 @@ public class Pieces {
 		this.intY=intY;
 	}
 	/**determines outcome of conflict*/
-	public void kill(int intRank, int intEnRank){
+	public void battle(int intRank, int intEnRank){
 		
 	}
 	
