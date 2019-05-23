@@ -133,7 +133,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		while (i<24) {
+		while (i<27) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 				if (intTemp2==-1) {
 					intTemp2=i;
@@ -195,21 +195,21 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		
 		thesendbutton = new JButton("Send"); 
 		thesendbutton.setSize(100,50); 
-		thesendbutton.setLocation(800,600); 
+		thesendbutton.setLocation(890,600); 
 		thesendbutton.addActionListener(this); 
 		
 		thetextfield = new JTextField("");
-		thetextfield.setSize(325,75); 
-		thetextfield.setLocation(700,500);
+		thetextfield.setSize(250,25); 
+		thetextfield.setLocation(770,500);
 		thetextfield.addActionListener(this);
 		
 		thearea = new JTextArea(""); 
-		thearea.setSize(325,300); 
-		thearea.setLocation(700,175);
+		thearea.setSize(250,300); 
+		thearea.setLocation(770,175);
 		
 		thescroll = new JScrollPane(thearea);
-		thescroll.setSize(325,300); 
-		thescroll.setLocation(700,175);
+		thescroll.setSize(250,300); 
+		thescroll.setLocation(770,175);
 		
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();
@@ -221,7 +221,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("10.8.12.225",1337,this);
+		ssm=new SuperSocketMaster("192.168.0.17",1337,this);
 		ssm.connect();
 		System.out.println(ssm.getMyAddress());
 	}
