@@ -82,20 +82,22 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*0);
 				}
 				if(intEX==thepanel.intDeltaBoard*0) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*8);
 				}else if(intEX==thepanel.intDeltaBoard*1) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
 				}else if(intEX==thepanel.intDeltaBoard*2) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
 				}else if(intEX==thepanel.intDeltaBoard*3) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
 				}else if(intEX==thepanel.intDeltaBoard*4) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
 				}else if(intEX==thepanel.intDeltaBoard*5) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
 				}else if(intEX==thepanel.intDeltaBoard*6) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
 				}else if(intEX==thepanel.intDeltaBoard*7) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+				}else if(intEX==thepanel.intDeltaBoard*8) {
 					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*0);
 				}
 				i++;
@@ -120,8 +122,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	
 	}
 	public void mousePressed (MouseEvent e) {
+		i=0;
 		while (i<21) {
-			
 			if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 				intTemp=i;
 				thepanel.blnFirstTime=false;
@@ -135,12 +137,12 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	}
 	public void mouseReleased(MouseEvent e) {
 		while (i<27) {
-				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+			if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 				if (intTemp2==-1) {
 					intTemp2=i;
 				}else {
 					intTemp3=i;
-					break;
+					break; 
 				}
 			}
 			i++;
@@ -155,8 +157,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp2].setIntX(intTempX);
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
-		}else{
-		//put restriction on piece movement in game here please sirsssssssss
+		}else if(thepanel.blnReady==true){
+			//put the shitz here
 		}
 		i=0;
 		intTemp=-1;

@@ -82,20 +82,22 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 					thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*0);
 				}
 				if(intEX==thepanel.intDeltaBoard*0) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*8);
 				}else if(intEX==thepanel.intDeltaBoard*1) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*7);
 				}else if(intEX==thepanel.intDeltaBoard*2) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*6);
 				}else if(intEX==thepanel.intDeltaBoard*3) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*5);
 				}else if(intEX==thepanel.intDeltaBoard*4) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*4);
 				}else if(intEX==thepanel.intDeltaBoard*5) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*3);
 				}else if(intEX==thepanel.intDeltaBoard*6) {
-					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*2);
 				}else if(intEX==thepanel.intDeltaBoard*7) {
+					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*1);
+				}else if(intEX==thepanel.intDeltaBoard*8) {
 					thepanel.EnPiece[i].setIntX(thepanel.intDeltaBoard*0);
 				}
 				i++;
@@ -221,7 +223,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("192.168.0.17",1337,this);
+		ssm=new SuperSocketMaster("10.112.63.129",1337,this);
 		ssm.connect();
 		System.out.println(ssm.getMyAddress());
 	}
