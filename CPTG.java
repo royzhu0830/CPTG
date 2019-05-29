@@ -136,18 +136,18 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		if (thepanel.blnReady==false) {
-			while (i<27) {
-				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
-					if (intTemp2==-1) {
-						intTemp2=i;
-					}else {
-						intTemp3=i;
-						break; 
-					}
+		while (i<27) {
+			if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+				if (intTemp2==-1) {
+					intTemp2=i;
+				}else {
+					intTemp3=i;
+					break; 
 				}
-				i++;
 			}
+			i++;
+		}
+		if (thepanel.blnReady==false) {
 			if (intTemp3!=-1 && intTemp==intTemp2) {
 				intTemp2=intTemp3;
 			}
@@ -158,27 +158,34 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
 		}else if(thepanel.blnReady==true){
-			if (e.getX()<thepanel.Piece[intTemp].getIntX() && e.getX()>=thepanel.Piece[intTemp].getIntX()-thepanel.intDeltaBoard && intTemp3==-1) {
+			if (intTempX>e.getX() && intTempX-thepanel.intDeltaBoard<=e.getX() && intTemp3==-1) {
+				System.out.println("Left");
 				thepanel.Piece[intTemp].setIntX(intTempX-thepanel.intDeltaBoard);
-			}else if(e.getX()>thepanel.Piece[intTemp].getIntX() && e.getX()<thepanel.Piece[intTemp].getIntX()+thepanel.intDeltaBoard && intTemp3==-1) {
+				thepanel.Piece[intTemp].setIntY(intTempY);
+			}else if(intTempX+thepanel.intDeltaBoard<e.getX() && intTempY+(2*thepanel.intDeltaBoard)>=e.getX() && intTemp3==-1) {
+				System.out.println("Right");
 				thepanel.Piece[intTemp].setIntX(intTempX+thepanel.intDeltaBoard);
-			}
-			if (e.getY()<thepanel.Piece[intTemp].getIntY() && e.getY()>=thepanel.Piece[intTemp].getIntY() - thepanel.intDeltaBoard && intTemp3==-1) {
+				thepanel.Piece[intTemp].setIntY(intTempY);
+			}else if (intTempY>e.getY() && intTempY-thepanel.intDeltaBoard<=e.getY() && intTemp3==-1) {
+				System.out.println("Up");
 				thepanel.Piece[intTemp].setIntY(intTempY-thepanel.intDeltaBoard);
-			}else if(e.getY()>thepanel.Piece[intTemp].getIntY() && e.getY()<thepanel.Piece[intTemp].getIntY()+thepanel.intDeltaBoard && intTemp3==-1) {
+				thepanel.Piece[intTemp].setIntX(intTempX);
+			}else if(intTempY+thepanel.intDeltaBoard<e.getY() && intTempY+(2*thepanel.intDeltaBoard)>=e.getY() && intTemp3==-1) {
+				System.out.println("down");
 				thepanel.Piece[intTemp].setIntY(intTempY+thepanel.intDeltaBoard);
-			}else if(intTemp3!=-1){
+				thepanel.Piece[intTemp].setIntX(intTempX);
+			}else {
+				System.out.println("Stay");
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
 			}
 			i=0;
-			while(i<21) {
+			/*while(i<21) {
 				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[intTemp].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[intTemp].getIntY()) {
 					System.out.println("Move");
 					//thepanel.Piece[intTemp].kill(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank());
-					break;
 				}
-			}
+			}*/
 		}
 		i=0;
 		intTemp=-1;
