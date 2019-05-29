@@ -158,23 +158,35 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
 		}else if(thepanel.blnReady==true){
-			if (intTempX>e.getX() && intTempX-thepanel.intDeltaBoard<=e.getX() && intTemp3==-1) {
+			//i=0;
+			while (i<21) {
+				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+					if (intTemp2==-1) {
+						intTemp2=i;
+					}else {
+						intTemp3=i;
+						break;
+					}
+				}
+				i++;
+			}
+			if (intTempX>e.getX() && intTempX-thepanel.intDeltaBoard<=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY()) {
 				System.out.println("Left");
 				thepanel.Piece[intTemp].setIntX(intTempX-thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntY(intTempY);
-			}else if(intTempX+thepanel.intDeltaBoard<e.getX() && intTempY+(2*thepanel.intDeltaBoard)>=e.getX() && intTemp3==-1) {
+			}else if(intTempX+thepanel.intDeltaBoard<e.getX() && intTempX+(2*thepanel.intDeltaBoard)>=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY()) {
 				System.out.println("Right");
 				thepanel.Piece[intTemp].setIntX(intTempX+thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntY(intTempY);
-			}else if (intTempY>e.getY() && intTempY-thepanel.intDeltaBoard<=e.getY() && intTemp3==-1) {
+			}else if (intTempY>e.getY() && intTempY-thepanel.intDeltaBoard<=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX()) {
 				System.out.println("Up");
 				thepanel.Piece[intTemp].setIntY(intTempY-thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntX(intTempX);
-			}else if(intTempY+thepanel.intDeltaBoard<e.getY() && intTempY+(2*thepanel.intDeltaBoard)>=e.getY() && intTemp3==-1) {
+			}else if(intTempY+thepanel.intDeltaBoard<e.getY() && intTempY+(2*thepanel.intDeltaBoard)>=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX()) {
 				System.out.println("down");
 				thepanel.Piece[intTemp].setIntY(intTempY+thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntX(intTempX);
-			}else {
+			}else if (intTemp!=-1){
 				System.out.println("Stay");
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
