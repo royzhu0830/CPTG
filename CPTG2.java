@@ -104,8 +104,6 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 					}
 					i++;
 					j=j+2;
-					strSplit[0]=null;
-					strSplit[1]=null;
 				}
 				j=0;
 				thepanel.blnReady=true;
@@ -158,18 +156,18 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		while (i<27) {
-			if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
-				if (intTemp2==-1) {
-					intTemp2=i;
-				}else {
-					intTemp3=i;
-					break; 
-				}
-			}
-			i++;
-		}
 		if (thepanel.blnReady==false) {
+			while (i<27) {
+				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
+					if (intTemp2==-1) {
+						intTemp2=i;
+					}else {
+						intTemp3=i;
+						break; 
+					}
+				}
+				i++;
+			}
 			if (intTemp3!=-1 && intTemp==intTemp2) {
 				intTemp2=intTemp3;
 			}
@@ -180,7 +178,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
 		}else if(thepanel.blnReady==true && blnTurn==true){
-			//i=0;
+			i=0;
 			while (i<21) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 					if (intTemp2==-1) {
@@ -293,7 +291,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		theframe.setResizable(true);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("10.8.12.222",1337,this);
+		ssm=new SuperSocketMaster("192.168.2.21",1337,this);
 		ssm.connect();
 		System.out.println(ssm.getMyAddress());
 	}
