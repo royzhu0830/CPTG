@@ -32,6 +32,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int intEY;
 	int intEnI;
 	boolean blnTurn=true;
+	boolean blnWin[] = new boolean[2];
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
@@ -221,12 +222,20 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp].setIntY(intTempY);
 			}
 			i=0;
-			/*while(i<21) {
+			while(i<21) {
 				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[intTemp].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[intTemp].getIntY()) {
-					System.out.println("Move");
-					//thepanel.Piece[intTemp].kill(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank());
+					
+					blnWin=thepanel.Piece[intTemp].battle(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank()); 
+					if(blnWin[0] == false){
+						thepanel.Piece[intTemp].setIntX(890); 
+						thepanel.Piece[intTemp].setIntY(10);
+				
+					}
+					
 				}
-			}*/
+			i++;
+			}
+			
 		}
 		i=0;
 		intTemp=-1;
@@ -266,21 +275,23 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		
 		thesendbutton = new JButton("Send"); 
 		thesendbutton.setSize(100,50); 
-		thesendbutton.setLocation(890,600); 
+		thesendbutton.setLocation(850,630); 
 		thesendbutton.addActionListener(this); 
-		
+
 		thetextfield = new JTextField("");
 		thetextfield.setSize(250,25); 
-		thetextfield.setLocation(770,500);
+		thetextfield.setLocation(770,600);
 		thetextfield.addActionListener(this);
-		
+
 		thearea = new JTextArea(""); 
-		thearea.setSize(250,300); 
-		thearea.setLocation(770,175);
-		
+		thearea.setSize(250,150); 
+		thearea.setLocation(770,450);
+
 		thescroll = new JScrollPane(thearea);
-		thescroll.setSize(250,300); 
-		thescroll.setLocation(770,175);
+		thescroll.setSize(250,150); 
+		thescroll.setLocation(770,450);
+
+
 		
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();

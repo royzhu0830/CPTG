@@ -38,7 +38,25 @@ public class Pieces {
 		this.intY=intY;
 	}
 	/**determines outcome of conflict*/
-	public void battle(int intRank, int intEnRank){
+	public boolean[] battle(int intRank, int intEnRank){
+		boolean blnWin[] = new boolean [2]; 
+		if(intRank > intEnRank){ 
+			blnWin[0] = false;
+			if(intEnRank == 14 && intRank == -1){ 
+				blnWin[0] = false;
+			} 
+		}else if (intRank < intEnRank){
+			blnWin[0] = true;
+			if(intRank == 14 && intEnRank == -1){
+				blnWin[0] = false; 
+			}
+		}else if (intRank == 15 && intEnRank == 15){
+			String strkourosh = "dead"; 
+			blnWin[0] = true;
+		}else{
+			blnWin[1] = true;
+		}
+		return blnWin;
 		
 	}
 	
