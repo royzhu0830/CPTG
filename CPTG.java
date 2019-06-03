@@ -44,7 +44,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	String strSplit[] = new String[2];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
-	
+	boolean blnGame = false; 
+	boolean blnMenu = true; 
+	boolean blnConnection = false; 
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==thetimer) {
@@ -149,6 +151,23 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		
 	}
 	public void mouseClicked(MouseEvent e) {
+		if (blnMenu == true){ 
+			if(e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 205 && e.getY() <= 282){ 
+				thepanel.blnMenu = false; 
+				thepanel.blnConnection = true;
+				blnMenu = false; 
+			}	
+		}
+		if (blnConnection == true){ 
+			if(e.getX() >= 138 && e.getX() <= 611 && e.getY() >= 390 && e.getY() <= 680){ 
+				thepanel.blnConnection = false; 
+				thepanel.blnGameboard = true;  
+				blnGame = true; 
+				thepanel.add(thebutton);
+				blnConnection = false; 
+			}
+		}
+
 	
 	}
 	public void mousePressed (MouseEvent e) {

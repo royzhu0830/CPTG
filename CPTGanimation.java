@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.util.*;
+import javax.imageio.*;
+import java.awt.image.*;
 
 //testing 123
 
@@ -26,6 +28,14 @@ public class CPTGanimation extends JPanel {
 	int intCounter;
 	int intDeadX = 890; 
 	int intDeadY = 110;
+	
+	boolean blnMenu = true;
+	boolean blnConnection = false; 
+	boolean blnGameboard = false; 
+	
+	BufferedImage imgTitle = null; 
+	BufferedImage imgConnection = null; 
+	
 	
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
@@ -173,9 +183,23 @@ public class CPTGanimation extends JPanel {
 			g.drawRect(intDeadX, intDeadY, 30, 30); 
 			
 		}
+		if (blnMenu == true){ 
+			g.drawImage(imgTitle,0,0,null); 
+		}
+		if(blnConnection == true){ 
+			g.drawImage(imgConnection,0,0,null); 
+		}
 	}
 	public CPTGanimation() {
 		super();
+			try{ 
+				imgTitle = ImageIO.read(new File("title.png")); 
+				}catch(IOException e){ 
+			}
+			try{ 
+				imgConnection = ImageIO.read(new File("Connection.png")); 
+				}catch(IOException e){ 
+		}
 	}
 }
 
