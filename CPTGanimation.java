@@ -11,7 +11,8 @@ public class CPTGanimation extends JPanel {
 	int intXBoard[][]=new int[8][9]; //for board
 	int intYBoard[][]=new int[8][9]; 
 	int intX=0; //for board
-	int intY=0; //for board
+	int intY=0; //for board 
+
 	
 	int intDeltaPiece=83; //change this value to make board bigger
 	int intDeltaBoard=intDeltaPiece+2;
@@ -20,8 +21,11 @@ public class CPTGanimation extends JPanel {
 	boolean blnFirstTime=true;
 	boolean blnReady=false;
 	boolean blnEnReady=false;
+	boolean blnDead = false; 
 	int intLength;
 	int intCounter;
+	int intDeadX = 890; 
+	int intDeadY = 110;
 	
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
@@ -92,47 +96,47 @@ public class CPTGanimation extends JPanel {
 				Piece[i]=new Pieces("",16,0,0);
 			}	
 			intCounter=0;
-			EnPiece[intCounter]=new Pieces("5G",intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
+			EnPiece[intCounter]=new Pieces("En5G",intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("4G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En4G",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("3G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En3G",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("2G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En2G",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("1G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En1G",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Col",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("EnCol",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("L. Col",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("EnL. Col",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Maj",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("EnMaj",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Cap",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("EnCap",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("1 L.",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En1 L.",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("2 L.",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("En2 L.",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Serg",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces("EnSerg",intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Spy",-1,0,0);
+			EnPiece[intCounter]=new Pieces("EnSpy",-1,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Spy",-1,0,0);
+			EnPiece[intCounter]=new Pieces("EnSpy",-1,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri1",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri1",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri2",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri2",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri3",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri3",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri4",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri4",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri5",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri5",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Pri6",14,0,0);
+			EnPiece[intCounter]=new Pieces("EnPri6",14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("Flag",15,0,0);
+			EnPiece[intCounter]=new Pieces("EnFlag",15,0,0);
 			intCounter++;
 			for (int i=intCounter; i<28; i++) {
 				EnPiece[i]=new Pieces("",16,0,0);
@@ -163,6 +167,11 @@ public class CPTGanimation extends JPanel {
 				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
 				g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
 			}
+		} 
+		if(blnDead == true){ 
+			g.setColor(Color.RED);
+			g.drawRect(intDeadX, intDeadY, 30, 30); 
+			
 		}
 	}
 	public CPTGanimation() {

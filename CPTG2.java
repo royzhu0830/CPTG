@@ -31,8 +31,11 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	int intEX;
 	int intEY;
 	int intEnI;
+	int intDeadX = 890; 
+	int intDeadY = 10;
 	boolean blnTurn=true;
-	boolean blnWin[] = new boolean [2];
+	boolean blnWin[] = new boolean [3];
+	boolean blnActivate = false;
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
@@ -51,6 +54,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			thepanel.add(thetextfield); 
 			//thepanel.add(thearea);
 			thepanel.add(thescroll);
+			blnActivate = true;
 			blnTurn=false;
 			i=0;
 			while (i<21) {
@@ -127,7 +131,9 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				}
 				blnTurn=true;
 			}
-		}
+		} 
+			
+		
 	}
 	public void mouseDragged(MouseEvent e) {
 		
@@ -222,13 +228,37 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			}
 			i=0;
 			while(i<21) {
-				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[intTemp].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[intTemp].getIntY()) {
-					
+				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[i].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[i].getIntY()) {
+					System.out.println(intTemp);
 					blnWin=thepanel.Piece[intTemp].battle(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank()); 
+					System.out.println("CPTG2"); 
+					System.out.println("Your: "+thepanel.Piece[intTemp].getIntRank());
+					System.out.println("Enemy: "+thepanel.EnPiece[i].getIntRank());
 					if(blnWin[0] == false){
-						thepanel.Piece[intTemp].setIntX(890); 
-						thepanel.Piece[intTemp].setIntY(10);
+						thepanel.Piece[intTemp].setIntX(intDeadX); 
+						thepanel.Piece[intTemp].setIntY(10);  
+						intDeadX = intDeadX + 10; 
+						System.out.println("Porn");
+						break;
 				
+					}else if (blnWin[0] == true){ 
+						thepanel.blnDead = true;
+						thepanel.EnPiece[i].setIntX(2000); 
+						thepanel.EnPiece[i].setIntY(2000); 
+						System.out.println("Tits");
+						break; 
+					} 
+					if(blnWin[1] == true){ 
+						//Win Screen 
+						System.out.println("Win");
+					}else if (blnWin[1] == false){ 
+						//Lose Screen
+						System.out.println("Lose");
+					}
+					if(blnWin[2] == true){ 
+						thepanel.Piece[intTemp].setIntX(intDeadX); 
+						thepanel.Piece[intTemp].setIntY(10);
+						intDeadX = intDeadX + 10; 
 					}
 					
 				}
@@ -260,11 +290,11 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	public CPTG2 () {
 		thepanel = new CPTGanimation();
 		thepanel.setLayout(null);
-		thepanel.setPreferredSize(new Dimension(1040,680));
+		thepanel.setPreferredSize(new Dimension(1280,720));
 		thepanel.addMouseListener(this);
 		thepanel.addMouseMotionListener(this);
 		
-		theframe = new JFrame("Game of Generals");
+		theframe = new JFrame("Game of Generals 2");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		thebutton = new JButton("Ready!");
@@ -298,10 +328,10 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		
 		theframe.setContentPane(thepanel);
 		theframe.pack();
-		theframe.setResizable(true);
+		theframe.setResizable(false);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster("10.112.61.208",1337,this);
+		ssm=new SuperSocketMaster("10.112.45.49",1337,this);
 		ssm.connect();
 		System.out.println(ssm.getMyAddress());
 	}
