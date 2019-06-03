@@ -47,6 +47,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	boolean blnGame = false; 
 	boolean blnMenu = true; 
 	boolean blnConnection = false; 
+
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==thetimer) {
@@ -156,6 +157,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.blnMenu = false; 
 				thepanel.blnConnection = true;
 				blnMenu = false; 
+				blnConnection = true; 
 			}	
 		}
 		if (blnConnection == true){ 
@@ -349,7 +351,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();
 		
-		thepanel.add(thebutton);
+	
 		
 		theframe.setContentPane(thepanel);
 		theframe.pack();

@@ -188,6 +188,7 @@ public class CPTGanimation extends JPanel {
 		}
 		if(blnConnection == true){ 
 			g.drawImage(imgConnection,0,0,null); 
+			
 		}
 	}
 	public CPTGanimation() {
