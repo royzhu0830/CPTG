@@ -14,8 +14,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	Timer thetimer;
 	JButton thebutton;
 	JButton thesendbutton; 
+	JButton theclientbutton; 
 	JScrollPane thescroll; 
 	JTextField thetextfield; 
+	JTextField theclientfield; 
 	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
@@ -44,9 +46,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	String strSplit[] = new String[2];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
-	boolean blnGame = false; 
 	boolean blnMenu = true; 
+	boolean blnGame = false; 
 	boolean blnConnection = false; 
+	boolean blnServer = false; 
+	boolean blnClient = false; 
 
 	
 	public void actionPerformed(ActionEvent e) {
@@ -137,9 +141,13 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				}
 				blnTurn=true;
 			}
-		} 
-	
-			
+		}
+		if (blnClient == true){ 
+			thepanel.add(theclientfield); 
+			thepanel.add(theclientbutton); 
+		}
+		if(e.getSource() == theclientbutton){ 
+		}
 	}
 	public void mouseDragged(MouseEvent e) {
 		
@@ -167,10 +175,16 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				blnGame = true; 
 				thepanel.add(thebutton);
 				blnConnection = false; 
+				blnServer = true; 
+			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
+				thepanel.blnConnection = false; 
+				thepanel.blnClient = true; 
+				blnConnection = false; 
+				blnServer = false; 
+				blnClient = true; 
 			}
 		}
-
-	
+			
 	}
 	public void mousePressed (MouseEvent e) {
 		i=0;
@@ -332,6 +346,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thesendbutton.setSize(100,50); 
 		thesendbutton.setLocation(850,630); 
 		thesendbutton.addActionListener(this); 
+		
+		theclientbutton = new JButton ("Connect"); 
+		theclientbutton.setSize(100,50); 
+		theclientbutton.setLocation(600,625); 
 
 		thetextfield = new JTextField("");
 		thetextfield.setSize(250,25); 
@@ -345,25 +363,32 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thescroll = new JScrollPane(thearea);
 		thescroll.setSize(250,150); 
 		thescroll.setLocation(770,450);
-
-
 		
+		theclientfield = new JTextField(); 
+		theclientfield.setSize(500,50); 
+		theclientfield.setLocation(420,550); 
+	
 		thetimer = new Timer(1000/60,this);
 		thetimer.start();
-		
-	
 		
 		theframe.setContentPane(thepanel);
 		theframe.pack();
 		theframe.setResizable(false);
 		theframe.setVisible(true);
 		
-		ssm=new SuperSocketMaster(1337,this);
-		ssm.connect();
-		System.out.println(ssm.getMyAddress());
+		if (blnServer == true){ 
+			ssm = new SuperSocketMaster(1337,this);
+			ssm.connect();
+			System.out.println(ssm.getMyAddress());
+		}
+		if (blnClient == true){ 
+			ssm = new SuperSocketMaster("10.8.12.222",1337,this); 
+			ssm.connect();
+		}
 	}
 	public static void main(String[] args) {
 		new CPTG();
 	}
 }
 //"192.168.2.21"
+
