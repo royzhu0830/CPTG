@@ -17,7 +17,12 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	JButton theclientbutton; 
 	JScrollPane thescroll; 
 	JTextField thetextfield; 
+<<<<<<< HEAD
 	JTextField theclientfield; 
+=======
+	JTextField thename; 
+	JLabel theIP;
+>>>>>>> 917f86a0dae6279d8b21b021aa007e125cc85341
 	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
@@ -37,13 +42,15 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int intDeadY = 10;
 	int intDeadX2 = 890; 
 	int intDeadY2 = 110; 
-	boolean blnTurn=true;
+	boolean blnTurn=false;
 	boolean blnWin[] = new boolean[3];
 	boolean blnActivate = false;
+	boolean blnSwap;
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
-	String strSplit[] = new String[2];
+	String strName; 
+	String strSplit[];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
 	boolean blnMenu = true; 
@@ -54,6 +61,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 
 	
 	public void actionPerformed(ActionEvent e) {
+		strName = thename.getText();
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
 		}
@@ -64,6 +72,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			//thepanel.add(thearea);
 			thepanel.add(thescroll); 
 			blnActivate = true;
+			//blnTurn = true;
 			i=0;
 			while (i<21) {
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
@@ -72,11 +81,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			ssm.sendText(strCoordinates.toString());
 			i=0;
 		}else if (e.getSource() == thesendbutton){
-			ssm.sendText(thetextfield.getText()); 
-			thearea.append(thetextfield.getText() + "\n");
+			ssm.sendText(strName+": "+thetextfield.getText()); 
+			thearea.append(strName+": "+thetextfield.getText() + "\n");
 			
 		}else if (e.getSource()==ssm) {
-			thearea.append(ssm.readText() + "\n");
+			thearea.append(strName+": "+ssm.readText() + "\n");
 			if (thepanel.blnReady==false) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
@@ -151,7 +160,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	}
 	public void mouseDragged(MouseEvent e) {
 		
-		if(intTemp!=-1 && blnTurn==true) {
+		if(intTemp!=-1) {
 			thepanel.Piece[intTemp].setIntX(e.getX());
 			thepanel.Piece[intTemp].setIntY(e.getY());
 		}
@@ -166,6 +175,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.blnConnection = true;
 				blnMenu = false; 
 				blnConnection = true; 
+				thepanel.add(thename); 
 			}	
 		}
 		if (blnConnection == true){ 
@@ -174,6 +184,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.blnGameboard = true;  
 				blnGame = true; 
 				thepanel.add(thebutton);
+				thepanel.remove(thename);
+				thepanel.add(theIP);
 				blnConnection = false; 
 				blnServer = true; 
 			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
@@ -222,7 +234,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp2].setIntX(intTempX);
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
-		}else if(thepanel.blnReady==true && blnTurn==true){
+		}else if(thepanel.blnReady==true && blnTurn==true && blnSwap==true){
 			i=0;
 			while (i<21) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
@@ -305,6 +317,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			i++;
 			}
 			
+		}else if(blnTurn==false) {
+			thepanel.Piece[intTemp].setIntX(intTempX);
+			thepanel.Piece[intTemp].setIntY(intTempY);
 		}
 		i=0;
 		intTemp=-1;
@@ -363,6 +378,14 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thescroll = new JScrollPane(thearea);
 		thescroll.setSize(250,150); 
 		thescroll.setLocation(770,450);
+<<<<<<< HEAD
+=======
+
+		thename = new JTextField("YourBoy"); 
+		thename.setSize(250,25); 
+		thename.setLocation(475,175); 
+		thename.addActionListener(this); 
+>>>>>>> 917f86a0dae6279d8b21b021aa007e125cc85341
 		
 		theclientfield = new JTextField(); 
 		theclientfield.setSize(500,50); 
@@ -376,6 +399,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theframe.setResizable(false);
 		theframe.setVisible(true);
 		
+<<<<<<< HEAD
 		if (blnServer == true){ 
 			ssm = new SuperSocketMaster(1337,this);
 			ssm.connect();
@@ -385,10 +409,23 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			ssm = new SuperSocketMaster("10.8.12.222",1337,this); 
 			ssm.connect();
 		}
+=======
+		ssm=new SuperSocketMaster(1337,this);
+		ssm.connect();
+		System.out.println(ssm.getMyAddress());
+		
+		theIP = new JLabel("IP: "+ssm.getMyAddress()); 
+		theIP.setSize(250,25); 
+		theIP.setLocation(0,675);
+		theIP.setForeground(Color.red);
+>>>>>>> 917f86a0dae6279d8b21b021aa007e125cc85341
 	}
 	public static void main(String[] args) {
 		new CPTG();
 	}
 }
+<<<<<<< HEAD
 //"192.168.2.21"
 
+=======
+>>>>>>> 917f86a0dae6279d8b21b021aa007e125cc85341
