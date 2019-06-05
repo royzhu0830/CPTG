@@ -386,4 +386,3 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		new CPTG();
 	}
 }
-//"192.168.2.21"
