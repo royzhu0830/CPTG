@@ -61,6 +61,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	String strClientAddress;
 	boolean blnServer = false;
 
+
 	
 	public void actionPerformed(ActionEvent e) {
 		strName = thename.getText();
