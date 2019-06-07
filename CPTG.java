@@ -44,7 +44,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	boolean blnTurn=false;
 	boolean blnWin[] = new boolean[3];
 	boolean blnActivate = false;
-	boolean blnSwap;
+	boolean blnSwap=true;
 	boolean blnHelp;
 	boolean blnSettings;
 	String strTempPiece;
@@ -64,7 +64,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 
 	
 	public void actionPerformed(ActionEvent e) {
-		strName = thename.getText();
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
 		} 
@@ -106,6 +105,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			//thepanel.add(thearea);
 			thepanel.add(thescroll); 
 			blnActivate = true;
+			if (blnClient==true) {
+				blnTurn=false;
+			}
 			i=0;
 			while (i<21) {
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
@@ -119,7 +121,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			
 		}else if (e.getSource()==ssm) {
 			thearea.append(strName+": "+ssm.readText() + "\n");
-			if (thepanel.blnReady==false) {
+			if (thepanel.blnReady==false && blnSwap==true) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
 					System.out.println(strSplit[j]+","+strSplit[j+1]);
@@ -162,8 +164,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 					strSplit[0]=null;
 					strSplit[1]=null;
 				}
+				
 				j=0;
 				thepanel.blnReady=true;
+				blnSwap=false;
 			}else{
 				strSplit=ssm.readText().split(",");
 				try{
@@ -187,7 +191,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	}
 	public void mouseDragged(MouseEvent e) {
 		
-		if(intTemp!=-1 && blnTurn==true) {
+		if(intTemp!=-1) {
 			thepanel.Piece[intTemp].setIntX(e.getX());
 			thepanel.Piece[intTemp].setIntY(e.getY());
 		}
@@ -255,8 +259,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		if (thepanel.blnReady==false) {
-			while (i<27) {
+		if (thepanel.blnReady==false && blnSwap==true) {
+			while (i<27 && intTemp!=-1) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 					if (intTemp2==-1) {
 						intTemp2=i;
@@ -276,9 +280,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.Piece[intTemp2].setIntX(intTempX);
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
-		}else if(thepanel.blnReady==true && blnTurn==true){
+		}else if(thepanel.blnReady==true && blnTurn==true && blnSwap==false){
 			i=0;
-			while (i<21) {
+			while (i<21 && intTemp!=-1) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 					if (intTemp2==-1) {
 						intTemp2=i;
@@ -317,9 +321,13 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				System.out.println("Stay");
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
+			}else {
+				thepanel.Piece[intTemp].setIntX(intTempX);
+				thepanel.Piece[intTemp].setIntY(intTempY);
 			}
+				
 			i=0;
-			while(i<21) {
+			while(i<21 && intTemp!=-1) {
 				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[i].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[i].getIntY()) {
 					System.out.println(intTemp);
 					blnWin=thepanel.Piece[intTemp].battle(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank()); 
