@@ -53,11 +53,29 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	boolean blnServer = false; 
 	boolean blnClient = false; 
 
+
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
 		}
+		if (e.getSource()==theclientbutton){
+			strClientAddress = theclientfield.getText(); 
+			System.out.println("button pressed");
+			if (blnClient == true){ 
+				ssm = new SuperSocketMaster(strClientAddress,1337,this); 
+				ssm.connect();
+			}
+			thepanel.blnConnection2 = false; 
+			thepanel.blnGameboard = true;  
+			blnGame = true; 
+			thepanel.add(thebutton);
+			thepanel.remove(theclientfield); 
+			thepanel.remove(theclientbutton); 
+			blnConnection = false; 
+		}
+				
+		
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
 			thepanel.add(thesendbutton);
@@ -143,11 +161,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				blnTurn=true;
 			}
 		}
-		if (blnClient == true){ 
-			strClientAddress = theclientfield.getText(); 
-			//System.out.println(""+strClientAddress); 
-			
-		}
 	}
 	public void mouseDragged(MouseEvent e) {
 		
@@ -170,20 +183,27 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		}
 		if (blnConnection == true){ 
 			if(e.getX() >= 138 && e.getX() <= 611 && e.getY() >= 390 && e.getY() <= 680){ 
+				blnServer = true; 
+				blnClient = false; 
 				thepanel.blnConnection = false; 
 				thepanel.blnGameboard = true;  
 				blnGame = true; 
 				thepanel.add(thebutton);
 				blnConnection = false; 
-				blnServer = true; 
+				if (blnServer == true){ 
+					ssm = new SuperSocketMaster(1337,this);
+					ssm.connect();
+					System.out.println(ssm.getMyAddress());
+				}
+				
 			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
-				thepanel.blnConnection = false; 
-				thepanel.blnClient = true; 
-				blnConnection = false; 
 				blnServer = false; 
 				blnClient = true; 
+				thepanel.blnConnection = false; 
+				thepanel.blnConnection2 = true;  
 				thepanel.add(theclientfield); 
-				thepanel.add(theclientbutton); 
+				thepanel.add(theclientbutton); 	
+				blnConnection = false;
 			}
 		}
 			
@@ -330,6 +350,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	public void keyTyped(KeyEvent e) {
 		
 	}
+	
 	public CPTG () {
 		thepanel = new CPTGanimation();
 		thepanel.setLayout(null);
@@ -352,6 +373,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theclientbutton = new JButton ("Connect"); 
 		theclientbutton.setSize(100,50); 
 		theclientbutton.setLocation(600,625); 
+		theclientbutton.addActionListener(this);
 
 		thetextfield = new JTextField("");
 		thetextfield.setSize(250,25); 
@@ -377,16 +399,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		theframe.pack();
 		theframe.setResizable(false);
 		theframe.setVisible(true);
-		
-		if (blnServer == true){ 
-			ssm = new SuperSocketMaster(1337,this);
-			ssm.connect();
-			System.out.println(ssm.getMyAddress());
-		}
-		if (blnClient == true){ 
-			ssm = new SuperSocketMaster(""+strClientAddress,1337,this); 
-			ssm.connect();
-		}
+	
 	}
 	public static void main(String[] args) {
 		new CPTG();

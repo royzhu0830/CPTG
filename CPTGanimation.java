@@ -31,8 +31,11 @@ public class CPTGanimation extends JPanel {
 	
 	boolean blnMenu = true;
 	boolean blnConnection = false; 
-	boolean blnClient = false; 
+	boolean blnConnection2 = false; 
 	boolean blnGameboard = false; 
+	
+	boolean blnServerC = false; 
+	boolean blnClientC = false; 
 	
 	BufferedImage imgTitle = null; 
 	BufferedImage imgConnection = null; 
@@ -191,9 +194,10 @@ public class CPTGanimation extends JPanel {
 		if(blnConnection == true){ 
 			g.drawImage(imgConnection,0,0,null); 
 		}
-		if (blnClient == true){ 
+		if (blnConnection2 == true){ 
 			g.drawImage(imgClient,0,0,null); 
 		}
+		
 	}
 	public CPTGanimation() {
 		super();
