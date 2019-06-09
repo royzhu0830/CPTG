@@ -39,31 +39,27 @@ public class Pieces {
 	}
 	/**determines outcome of conflict*/
 	public boolean[] battle(int intRank, int intEnRank){
-		boolean blnWin[] = new boolean [4];
+		boolean blnWin[] = new boolean [3];
 		if(intRank > intEnRank){ 
 			blnWin[0] = false;
-			if(intRank == -1){ 
+			if(intRank == 14 && intEnRank==-1){ 
 				blnWin[0] = true;
 			}else if (intRank == 15){ 
 				blnWin[1] = false;
 			}
 		}else if (intRank < intEnRank){
 			blnWin[0] = true;
-			if(intEnRank == -1){
-				blnWin[0] = false; 
+			if (intEnRank==14 && intRank==-1) {
+				blnWin[0]=false;
 			}else if (intEnRank == 15){ 
 				blnWin[1] = true;
 			}
 		}else if (intRank == 15 && intEnRank == 15){
 			blnWin[0] = true;
-		}else{
+			blnWin[1]=true;
+		}else if(intRank==intEnRank){
 			blnWin[2] = true;
 		} 
-		if (intRank==16) {
-			blnWin[3]=false;
-		}else if(intEnRank==16) {
-			blnWin[3]=true;
-		}
 		return blnWin;
 
 		

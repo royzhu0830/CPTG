@@ -179,6 +179,7 @@ public class CPTGanimation extends JPanel {
 			blnFirstTime=false;
 		}else if (blnFirstTime==false) {//fix identation if it works
 			for (int i=0; i<21; i++) {
+				g.setColor(Color.BLUE);
 				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
 				g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
 			}
