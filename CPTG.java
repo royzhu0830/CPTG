@@ -24,12 +24,18 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	JButton thesendbutton; 
 	JButton helpquitbutton; 
 	JButton playbackbutton; 
+	JButton settingsbackbutton;
+	JButton clientbackbutton;  
 	JButton theclientbutton;
 	JScrollPane thescroll; 
 	JTextField thetextfield;
 	JTextField theclientfield; 
 	JTextField thename; 
+	JTextField portnumber;
+	JTextField portnumber2; 
 	JLabel theIP;
+	JLabel reminder; 
+	JLabel portwarning; 
 	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
@@ -49,12 +55,14 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int intDeadY = 10;
 	int intDeadX2 = 800; 
 	int intDeadY2 = 300; 
+	int intPortNumber; 
+	int intPortNumber2; 
 	boolean blnTurn=true;
 	boolean blnWin[] = new boolean[5];
 	boolean blnActivate = false;
 	boolean blnSwap=true;
 	boolean blnHelp;
-	boolean blnSettings;
+	boolean blnSettings = false;
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
@@ -69,10 +77,30 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	boolean blnClient = false; 
 	String strClientAddress;
 	boolean blnServer = false;
+	char chrQuit;
 
 
 	
 	public void actionPerformed(ActionEvent e) {
+		strName = thename.getText();
+		if(chrQuit == 'q'){ 
+			theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
+		}
+		if(blnSettings == true){
+			try{ 
+				intPortNumber = Integer.parseInt(portnumber.getText());
+			}catch(NumberFormatException q){ 
+				intPortNumber = 0; 
+			} 
+			if(intPortNumber > 10000 || intPortNumber < 0){ 
+				intPortNumber = 0; 
+			} 
+			if(intPortNumber == 0){ 
+				thepanel.add(portwarning); 
+			}else{ 
+				thepanel.remove(portwarning); 
+			}
+		}
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
 		} 
@@ -90,12 +118,20 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			thepanel.blnConnection = false;
 			
 		}
+		if(e.getSource() == settingsbackbutton){ 
+			thepanel.blnSettings = false; 
+			thepanel.remove(settingsbackbutton);
+			thepanel.remove(portnumber); 
+			thepanel.remove(portnumber2);
+			blnMenu = true;
+		}
 		if (e.getSource()==theclientbutton){
-			strClientAddress = theclientfield.getText(); 
+			strClientAddress = theclientfield.getText();
+			thepanel.remove(thename); 
 			System.out.println("button pressed");
 			if (blnClient == true){ 
-				ssm = new SuperSocketMaster(strClientAddress,1337,this);
-				ssm2 = new SuperSocketMaster(strClientAddress,1400,this); 
+				ssm = new SuperSocketMaster(strClientAddress,intPortNumber,this);
+				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber,this); 
 				ssm.connect();
 				ssm2.connect();
 			}
@@ -196,6 +232,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				}else if(strSplit[0].equals("D")) {
 					thepanel.EnPiece[intEnI].setIntY(thepanel.EnPiece[intEnI].getIntY()-thepanel.intDeltaBoard);
 				}
+				if (thepanel.Piece[20].getIntY()==0) {
+					System.out.println("Win by getting to other side");
+				}else if (thepanel.EnPiece[20].getIntY()==595){
+					System.out.println("Lose by getting to other side");
+				}
 				blnTurn=true;
 				i=0;
 				blnWin=null;
@@ -250,10 +291,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 								intDeadX2=840;
 							}
 						} 
-						if(blnWin[1] == true || thepanel.Piece[i].getIntY()==0){ 
+						if(blnWin[1] == true){ 
 							//Win Screen 
 							System.out.println("Win");
-						}else if (blnWin[3] == true || thepanel.EnPiece[intEnI].getIntY()==0){ 
+						}else if (blnWin[3] == true){ 
 							//Lose Screen
 							System.out.println("Lose");
 						}
@@ -280,13 +321,23 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.blnConnection = true;
 				blnMenu = false; 
 				blnConnection = true; 
+				thepanel.add(thename);
+				thepanel.add(playbackbutton);
 				
 			}else if(e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 540 && e.getY() <= 617){ 
 				theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
 			}else if(e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 415 && e.getY() <= 492){ 
 				thepanel.blnHelp = true;
 				blnMenu = false; 
-			} 
+				
+			}else if (e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 310 && e.getY() <= 387){ 
+				thepanel.blnSettings = true;
+				thepanel.add(settingsbackbutton);
+				thepanel.add(portnumber);
+				thepanel.add(portnumber2);
+				blnSettings = true;
+				blnMenu = false;
+			}  
 		}
 		if(thepanel.blnHelp == true){ 
 			thepanel.add(helpquitbutton);
@@ -299,16 +350,22 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				thepanel.blnGameboard = true;  
 				blnGame = true; 
 				thepanel.add(thebutton);
+				thepanel.remove(thename); 
+				thepanel.remove(playbackbutton); 
 				blnConnection = false; 
 				if (blnServer == true){ 
-					ssm = new SuperSocketMaster(1337,this);
-					ssm2 = new SuperSocketMaster(1400,this);
+					thepanel.remove(playbackbutton);
+					ssm = new SuperSocketMaster(intPortNumber,this);
+					ssm2 = new SuperSocketMaster(intPortNumber,this);
 					ssm.connect();
-					ssm2.connect();
+					ssm2.connect(); 
+					theIP.setText("IP: "+ssm.getMyAddress());
+					thepanel.add(theIP);
 					System.out.println(ssm.getMyAddress());
 				}
 				
 			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
+				thepanel.remove(playbackbutton);
 				blnServer = false; 
 				blnClient = true; 
 				thepanel.blnConnection = false; 
@@ -398,10 +455,13 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 				System.out.println("Stay");
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
-			//}else {
-				//thepanel.Piece[intTemp].setIntX(intTempX);
-				//thepanel.Piece[intTemp].setIntY(intTempY);
 			}
+			if (thepanel.Piece[20].getIntY()==0) {
+				System.out.println("Win by getting to other side");
+			}else if (thepanel.EnPiece[20].getIntY()==595){
+				System.out.println("Lose by getting to other side");
+			}
+			
 				
 			i=0;
 			while(i<21 && intTemp!=-1) {
@@ -455,10 +515,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 							intDeadX2=840;
 						}
 					}
-					if(blnWin[1] == true || thepanel.Piece[i].getIntY()==0){ 
+					if(blnWin[1] == true){ 
 						//Win Screen 
 						System.out.println("Win");
-					}else if (blnWin[3] == true || thepanel.EnPiece[intEnI].getIntY()==0){ 
+					}else if (blnWin[3] == true){ 
 						//Lose Screen
 						System.out.println("Lose");
 					}
@@ -512,6 +572,21 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thesendbutton.setLocation(850,630); 
 		thesendbutton.addActionListener(this); 
 		
+		helpquitbutton = new JButton("Back");
+		helpquitbutton.setSize(300,100); 
+		helpquitbutton.setLocation(980,620);
+		helpquitbutton.addActionListener(this);
+		
+		playbackbutton = new JButton("Back"); 
+		playbackbutton.setSize(300,100); 
+		playbackbutton.setLocation(0,0); 
+		playbackbutton.addActionListener(this);
+		
+		settingsbackbutton = new JButton("Back"); 
+		settingsbackbutton.setSize(300,100); 
+		settingsbackbutton.setLocation(980,620); 
+		settingsbackbutton.addActionListener(this);
+		
 		theclientbutton = new JButton ("Connect"); 
 		theclientbutton.setSize(100,50); 
 		theclientbutton.setLocation(600,625); 
@@ -521,10 +596,35 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thetextfield.setSize(250,25); 
 		thetextfield.setLocation(770,600);
 		thetextfield.addActionListener(this);
+		
+		thename = new JTextField("YourBoy"); 
+		thename.setSize(250,25); 
+		thename.setLocation(500,175);
+		thename.addActionListener(this);
+
+		portnumber = new JTextField(""); 
+		portnumber.setSize(250,25); 
+		portnumber.setLocation(289,170); 
+		portnumber.addActionListener(this);
+		
+		portnumber2 = new JTextField(""); 
+		portnumber2.setSize(250,25); 
+		portnumber2.setLocation(289,269); 
+		portnumber2.addActionListener(this);
+		
+		portwarning = new JLabel("Type valid port number"); 
+		portwarning.setSize(700,50); 
+		portwarning.setLocation(0,0); 
+		portwarning.setForeground(Color.red);
+		
+		theIP = new JLabel("");
+		theIP.setSize(300,50); 
+		theIP.setLocation(1150,0);
+		theIP.setForeground(Color.red);
 
 		thearea = new JTextArea(""); 
 		thearea.setSize(250,150); 
-		thearea.setLocation(770,450);
+		thearea.setLocation(770,450); 
 
 		thescroll = new JScrollPane(thearea);
 		thescroll.setSize(250,150); 

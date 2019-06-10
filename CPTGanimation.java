@@ -35,12 +35,13 @@ public class CPTGanimation extends JPanel {
 	boolean blnGameboard = false;
 	boolean blnHelp = false; 
 	boolean blnConnection2 = false;
+	boolean blnSettings = false; 
 	
 	BufferedImage imgTitle = null; 
 	BufferedImage imgConnection = null; 
 	BufferedImage imgClient = null; 
 	BufferedImage imgHelp = null;
-	
+	BufferedImage imgSettings = null; 
 	
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
@@ -204,6 +205,9 @@ public class CPTGanimation extends JPanel {
 		if(blnHelp == true){ 
 			g.drawImage(imgHelp,0,0,null);
 		}
+		if(blnSettings == true){ 
+			g.drawImage(imgSettings,0,0,null);
+		}
 	}
 	public CPTGanimation() {
 		super();
@@ -221,6 +225,11 @@ public class CPTGanimation extends JPanel {
 			}
 			try{ 
 				imgHelp = ImageIO.read(new File("HelpScreen.png")); 
+			}catch(IOException e){ 
+				
+			}
+			try{ 
+				imgSettings = ImageIO.read(new File("Settings.png")); 
 			}catch(IOException e){ 
 				
 			}

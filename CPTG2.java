@@ -5,8 +5,16 @@ import java.awt.event.*;
 import javax.swing.event.*;
 
 //game of the generals, 
-/*ISSUES:
-when click anywhere, automatic swap of 5G testing 123
+/*TO DO LIST:
+-determine winner and loser (create winner/loser page)
+-create loading screen on server while client connects to server
+-add pics of pieces
+	-determine positioning of dead pieces
+-settings page with port number
+-change client page from port number to IP address
+***REMEMBER to utilize file io
+-add header and make the game display look better
+
 */
 public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
 	JFrame theframe;
@@ -16,12 +24,18 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	JButton thesendbutton; 
 	JButton helpquitbutton; 
 	JButton playbackbutton; 
+	JButton settingsbackbutton;
+	JButton clientbackbutton;  
 	JButton theclientbutton;
 	JScrollPane thescroll; 
 	JTextField thetextfield;
 	JTextField theclientfield; 
 	JTextField thename; 
+	JTextField portnumber;
+	JTextField portnumber2; 
 	JLabel theIP;
+	JLabel reminder; 
+	JLabel portwarning; 
 	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
@@ -37,33 +51,56 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	int intEX;
 	int intEY;
 	int intEnI;
-	int intDeadX = 890; 
+	int intDeadX = 800; 
 	int intDeadY = 10;
-	int intDeadX2 = 890; 
-	int intDeadY2 = 110; 
-	boolean blnTurn=false;
-	boolean blnWin[] = new boolean[3];
+	int intDeadX2 = 800; 
+	int intDeadY2 = 300; 
+	int intPortNumber; 
+	int intPortNumber2; 
+	boolean blnTurn=true;
+	boolean blnWin[] = new boolean[5];
 	boolean blnActivate = false;
-	boolean blnSwap;
+	boolean blnSwap=true;
 	boolean blnHelp;
-	boolean blnSettings;
+	boolean blnSettings = false;
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
-	String strName; 
+	String strName="bob"; 
 	String strSplit[];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
+	SuperSocketMaster ssm2;
 	boolean blnGame = false; 
 	boolean blnMenu = true; 
 	boolean blnConnection = false; 
 	boolean blnClient = false; 
 	String strClientAddress;
 	boolean blnServer = false;
+	char chrQuit;
+
 
 	
 	public void actionPerformed(ActionEvent e) {
 		strName = thename.getText();
+		if(chrQuit == 'q'){ 
+			theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
+		}
+		if(blnSettings == true){
+			try{ 
+				intPortNumber = Integer.parseInt(portnumber.getText());
+			}catch(NumberFormatException q){ 
+				intPortNumber = 0; 
+			} 
+			if(intPortNumber > 10000 || intPortNumber < 0){ 
+				intPortNumber = 0; 
+			} 
+			if(intPortNumber == 0){ 
+				thepanel.add(portwarning); 
+			}else{ 
+				thepanel.remove(portwarning); 
+			}
+		}
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
 		} 
@@ -81,12 +118,22 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			thepanel.blnConnection = false;
 			
 		}
+		if(e.getSource() == settingsbackbutton){ 
+			thepanel.blnSettings = false; 
+			thepanel.remove(settingsbackbutton);
+			thepanel.remove(portnumber); 
+			thepanel.remove(portnumber2);
+			blnMenu = true;
+		}
 		if (e.getSource()==theclientbutton){
-			strClientAddress = theclientfield.getText(); 
+			strClientAddress = theclientfield.getText();
+			thepanel.remove(thename); 
 			System.out.println("button pressed");
 			if (blnClient == true){ 
-				ssm = new SuperSocketMaster(strClientAddress,1337,this); 
+				ssm = new SuperSocketMaster(strClientAddress,intPortNumber,this);
+				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber,this); 
 				ssm.connect();
+				ssm2.connect();
 			}
 			thepanel.blnConnection2 = false; 
 			thepanel.blnGameboard = true;  
@@ -96,8 +143,6 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			thepanel.remove(theclientbutton); 
 			blnConnection = false; 
 		}
-				
-		
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
 			thepanel.add(thesendbutton);
@@ -105,6 +150,10 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			//thepanel.add(thearea);
 			thepanel.add(thescroll); 
 			blnActivate = true;
+			blnSwap=false;
+			if (blnClient==true) {
+				blnTurn=false;
+			}
 			i=0;
 			while (i<21) {
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
@@ -113,11 +162,12 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			ssm.sendText(strCoordinates.toString());
 			i=0;
 		}else if (e.getSource() == thesendbutton){
-			ssm.sendText(strName+": "+thetextfield.getText()); 
+			ssm2.sendText(strName+": "+thetextfield.getText()); 
 			thearea.append(strName+": "+thetextfield.getText() + "\n");
 			
+		}else if (e.getSource()==ssm2) {
+			thearea.append(ssm2.readText() + "\n");
 		}else if (e.getSource()==ssm) {
-			thearea.append(strName+": "+ssm.readText() + "\n");
 			if (thepanel.blnReady==false) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
@@ -161,8 +211,10 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 					strSplit[0]=null;
 					strSplit[1]=null;
 				}
+				
 				j=0;
 				thepanel.blnReady=true;
+				//blnSwap=false;
 			}else{
 				strSplit=ssm.readText().split(",");
 				try{
@@ -180,13 +232,81 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				}else if(strSplit[0].equals("D")) {
 					thepanel.EnPiece[intEnI].setIntY(thepanel.EnPiece[intEnI].getIntY()-thepanel.intDeltaBoard);
 				}
+				if (thepanel.Piece[20].getIntY()==0) {
+					System.out.println("Win by getting to other side");
+				}else if (thepanel.EnPiece[20].getIntY()==595){
+					System.out.println("Lose by getting to other side");
+				}
 				blnTurn=true;
+				i=0;
+				blnWin=null;
+				while(i<21) {
+					//System.out.println("While loop az");
+					if(thepanel.Piece[i].getIntX()==thepanel.EnPiece[intEnI].getIntX() && thepanel.Piece[i].getIntY()==thepanel.EnPiece[intEnI].getIntY()) {
+						System.out.println("If statementaz");
+						blnWin=thepanel.Piece[i].battle(thepanel.Piece[i].getIntRank(),thepanel.EnPiece[intEnI].getIntRank()); 
+						System.out.println("Your: "+thepanel.Piece[i].getIntRank());
+						System.out.println("Enemy: "+thepanel.EnPiece[intEnI].getIntRank());
+						System.out.println("CPTG");
+						System.out.println(blnWin[0] + " " + blnWin[1] + " " + blnWin[2] + " " + blnWin[3] + " " + blnWin[4]);
+						if (blnWin[4]==true) {
+							blnWin[3]=true;
+							System.out.println("Both died");
+							thepanel.Piece[i].setIntX(intDeadX);
+							thepanel.Piece[i].setIntY(intDeadY);
+						}else if (blnWin[2]==true) {
+							System.out.println("Both die");
+							thepanel.Piece[i].setIntX(intDeadX); 
+							thepanel.Piece[i].setIntY(intDeadY);
+							thepanel.blnDead = true;
+							thepanel.EnPiece[intEnI].setIntX(intDeadX2); 
+							thepanel.EnPiece[intEnI].setIntY(intDeadY2);
+							intDeadX=intDeadX+90;
+							intDeadX2=intDeadX2+90;
+							if (intDeadX>1195) {
+								intDeadY=intDeadY+90;
+								intDeadX=840;
+							}
+							if (intDeadX2>1195) {
+								intDeadY2=intDeadY2+90;
+								intDeadX2=840;
+							}
+						}else if(blnWin[0] == false){
+							System.out.println("Battle lose");
+							thepanel.Piece[i].setIntX(intDeadX); 
+							thepanel.Piece[i].setIntY(intDeadY);
+							intDeadX = intDeadX + 90; 
+							if (intDeadX>1195) {
+								intDeadY=intDeadY+90;
+								intDeadX=840;
+							}
+						}else if (blnWin[0] == true){ 
+							System.out.println("Battle win");
+							thepanel.blnDead = true;
+							thepanel.EnPiece[intEnI].setIntX(intDeadX2); 
+							thepanel.EnPiece[intEnI].setIntY(intDeadY2);
+							intDeadX2 = intDeadX2+90;
+							if (intDeadX2>1195) {
+								intDeadY2=intDeadY2+90;
+								intDeadX2=840;
+							}
+						} 
+						if(blnWin[1] == true){ 
+							//Win Screen 
+							System.out.println("Win");
+						}else if (blnWin[3] == true){ 
+							//Lose Screen
+							System.out.println("Lose");
+						}
+					}
+					i++;
+				}
 			}
 		}
 	}
 	public void mouseDragged(MouseEvent e) {
 		
-		if(intTemp!=-1 && blnTurn==true) {
+		if(intTemp!=-1) {
 			thepanel.Piece[intTemp].setIntX(e.getX());
 			thepanel.Piece[intTemp].setIntY(e.getY());
 		}
@@ -201,13 +321,23 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.blnConnection = true;
 				blnMenu = false; 
 				blnConnection = true; 
+				thepanel.add(thename);
+				thepanel.add(playbackbutton);
 				
 			}else if(e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 540 && e.getY() <= 617){ 
 				theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
 			}else if(e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 415 && e.getY() <= 492){ 
 				thepanel.blnHelp = true;
 				blnMenu = false; 
-			} 
+				
+			}else if (e.getX() >= 30 && e.getX() <= 597 && e.getY() >= 310 && e.getY() <= 387){ 
+				thepanel.blnSettings = true;
+				thepanel.add(settingsbackbutton);
+				thepanel.add(portnumber);
+				thepanel.add(portnumber2);
+				blnSettings = true;
+				blnMenu = false;
+			}  
 		}
 		if(thepanel.blnHelp == true){ 
 			thepanel.add(helpquitbutton);
@@ -220,14 +350,22 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.blnGameboard = true;  
 				blnGame = true; 
 				thepanel.add(thebutton);
+				thepanel.remove(thename); 
+				thepanel.remove(playbackbutton); 
 				blnConnection = false; 
 				if (blnServer == true){ 
-					ssm = new SuperSocketMaster(1337,this);
+					thepanel.remove(playbackbutton);
+					ssm = new SuperSocketMaster(intPortNumber,this);
+					ssm2 = new SuperSocketMaster(intPortNumber,this);
 					ssm.connect();
+					ssm2.connect(); 
+					theIP.setText("IP: "+ssm.getMyAddress());
+					thepanel.add(theIP);
 					System.out.println(ssm.getMyAddress());
 				}
 				
 			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
+				thepanel.remove(playbackbutton);
 				blnServer = false; 
 				blnClient = true; 
 				thepanel.blnConnection = false; 
@@ -254,8 +392,9 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		i=0;
 	}
 	public void mouseReleased(MouseEvent e) {
-		if (thepanel.blnReady==false) {
-			while (i<27) {
+		
+		if (blnSwap==true) {
+			while (i<27 && intTemp!=-1) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 					if (intTemp2==-1) {
 						intTemp2=i;
@@ -275,9 +414,9 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.Piece[intTemp2].setIntX(intTempX);
 				thepanel.Piece[intTemp2].setIntY(intTempY);
 			}
-		}else if(thepanel.blnReady==true && blnTurn==true){
+		}else if(thepanel.blnReady==true && blnTurn==true && blnSwap==false){
 			i=0;
-			while (i<21) {
+			while (i<21 && intTemp!=-1) {
 				if (thepanel.Piece[i].getIntX()<=e.getX() && thepanel.Piece[i].getIntX() + thepanel.intDeltaPiece>e.getX() && thepanel.Piece[i].getIntY()<=e.getY() && thepanel.Piece[i].getIntY()+thepanel.intDeltaPiece>e.getY()) {
 					if (intTemp2==-1) {
 						intTemp2=i;
@@ -317,47 +456,79 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
 			}
+			if (thepanel.Piece[20].getIntY()==0) {
+				System.out.println("Win by getting to other side");
+			}else if (thepanel.EnPiece[20].getIntY()==595){
+				System.out.println("Lose by getting to other side");
+			}
+			
+				
 			i=0;
-			while(i<21) {
+			while(i<21 && intTemp!=-1) {
 				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[i].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[i].getIntY()) {
+					blnWin=null;
 					System.out.println(intTemp);
 					blnWin=thepanel.Piece[intTemp].battle(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank()); 
 					System.out.println("Your: "+thepanel.Piece[intTemp].getIntRank());
 					System.out.println("Enemy: "+thepanel.EnPiece[i].getIntRank());
 					System.out.println("CPTG");
-					if(blnWin[0] == false){
+					System.out.println(blnWin[0] + " " + blnWin[1] + " " + blnWin[2]);
+					if (blnWin[4]==true) {
+						blnWin[1]=true;
+						System.out.println("Both died");
+						thepanel.EnPiece[i].setIntX(intDeadX2);
+						thepanel.EnPiece[i].setIntY(intDeadY2);
+					}else if (blnWin[2]==true) {
+						System.out.println("Both die");
 						thepanel.Piece[intTemp].setIntX(intDeadX); 
 						thepanel.Piece[intTemp].setIntY(intDeadY);
-						ssm.sendText(String.valueOf(intTemp)+",E");
-						intDeadX = intDeadX + 10; 
-					
-						break;
-				
-					}else if (blnWin[0] == true){ 
 						thepanel.blnDead = true;
-						thepanel.EnPiece[i].setIntX(2000); 
-						thepanel.EnPiece[i].setIntY(2000);
-						ssm.sendText(String.valueOf(intTemp)+",O");
-						break;
+						thepanel.EnPiece[i].setIntX(intDeadX2); 
+						thepanel.EnPiece[i].setIntY(intDeadY2);
+						intDeadX=intDeadX+90;
+						intDeadX2=intDeadX2+90;
+						if (intDeadX>1195) {
+							intDeadY=intDeadY+90;
+							intDeadX=840;
+						}
+						if (intDeadX2>1195) {
+							intDeadY2=intDeadY2+90;
+							intDeadX2=840;
+						}
+					}else if(blnWin[0] == false){
+						System.out.println("Battle lose");
+						thepanel.Piece[intTemp].setIntX(intDeadX); 
+						thepanel.Piece[intTemp].setIntY(intDeadY);
+						intDeadX = intDeadX + 90; 
+						if (intDeadX>1195) {
+							intDeadY=intDeadY+90;
+							intDeadX=840;
+						}
+					}else if (blnWin[0] == true){ 
+						System.out.println("Battle win");
+						thepanel.blnDead = true;
+						thepanel.EnPiece[i].setIntX(intDeadX2); 
+						thepanel.EnPiece[i].setIntY(intDeadY2);
+						intDeadX2 = intDeadX2+90;
+						if (intDeadX2>1195) {
+							intDeadY2=intDeadY2+90;
+							intDeadX2=840;
+						}
 					}
 					if(blnWin[1] == true){ 
 						//Win Screen 
 						System.out.println("Win");
-					}else if (blnWin[1] == false){ 
+					}else if (blnWin[3] == true){ 
 						//Lose Screen
 						System.out.println("Lose");
 					}
-					if(blnWin[2] == true){ 
-						thepanel.Piece[intTemp].setIntX(intDeadX); 
-						thepanel.Piece[intTemp].setIntY(10);
-						intDeadX = intDeadX + 10;  
-						ssm.sendText(String.valueOf(intTemp)+",B");
-					}
-					
 				}
 			i++;
 			}
 			
+		}else if(intTemp!=-1){
+			thepanel.Piece[intTemp].setIntX(intTempX);
+			thepanel.Piece[intTemp].setIntY(intTempY);
 		}
 		i=0;
 		intTemp=-1;
@@ -389,7 +560,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		thepanel.addMouseListener(this);
 		thepanel.addMouseMotionListener(this);
 		
-		theframe = new JFrame("Game of Generals 1");
+		theframe = new JFrame("Game of Generals 2");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		thebutton = new JButton("Ready!");
@@ -401,6 +572,21 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		thesendbutton.setLocation(850,630); 
 		thesendbutton.addActionListener(this); 
 		
+		helpquitbutton = new JButton("Back");
+		helpquitbutton.setSize(300,100); 
+		helpquitbutton.setLocation(980,620);
+		helpquitbutton.addActionListener(this);
+		
+		playbackbutton = new JButton("Back"); 
+		playbackbutton.setSize(300,100); 
+		playbackbutton.setLocation(0,0); 
+		playbackbutton.addActionListener(this);
+		
+		settingsbackbutton = new JButton("Back"); 
+		settingsbackbutton.setSize(300,100); 
+		settingsbackbutton.setLocation(980,620); 
+		settingsbackbutton.addActionListener(this);
+		
 		theclientbutton = new JButton ("Connect"); 
 		theclientbutton.setSize(100,50); 
 		theclientbutton.setLocation(600,625); 
@@ -410,10 +596,35 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		thetextfield.setSize(250,25); 
 		thetextfield.setLocation(770,600);
 		thetextfield.addActionListener(this);
+		
+		thename = new JTextField("YourBoy"); 
+		thename.setSize(250,25); 
+		thename.setLocation(500,175);
+		thename.addActionListener(this);
+
+		portnumber = new JTextField(""); 
+		portnumber.setSize(250,25); 
+		portnumber.setLocation(289,170); 
+		portnumber.addActionListener(this);
+		
+		portnumber2 = new JTextField(""); 
+		portnumber2.setSize(250,25); 
+		portnumber2.setLocation(289,269); 
+		portnumber2.addActionListener(this);
+		
+		portwarning = new JLabel("Type valid port number"); 
+		portwarning.setSize(700,50); 
+		portwarning.setLocation(0,0); 
+		portwarning.setForeground(Color.red);
+		
+		theIP = new JLabel("");
+		theIP.setSize(300,50); 
+		theIP.setLocation(1150,0);
+		theIP.setForeground(Color.red);
 
 		thearea = new JTextArea(""); 
 		thearea.setSize(250,150); 
-		thearea.setLocation(770,450);
+		thearea.setLocation(770,450); 
 
 		thescroll = new JScrollPane(thearea);
 		thescroll.setSize(250,150); 
