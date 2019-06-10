@@ -39,13 +39,13 @@ public class Pieces {
 	}
 	/**determines outcome of conflict*/
 	public boolean[] battle(int intRank, int intEnRank){
-		boolean blnWin[] = new boolean [3];
-		if(intRank > intEnRank){ 
+		boolean blnWin[] = new boolean [5];
+		if(intRank > intEnRank){  //if player loses
 			blnWin[0] = false;
-			if(intRank == 14 && intEnRank==-1){ 
+			if(intRank == 14 && intEnRank==-1){ //if spy vs private
 				blnWin[0] = true;
-			}else if (intRank == 15){ 
-				blnWin[1] = false;
+			}else if (intRank == 15){ //if the flag is killed
+				blnWin[3] = true;
 			}
 		}else if (intRank < intEnRank){
 			blnWin[0] = true;
@@ -55,8 +55,7 @@ public class Pieces {
 				blnWin[1] = true;
 			}
 		}else if (intRank == 15 && intEnRank == 15){
-			blnWin[0] = true;
-			blnWin[1]=true;
+			blnWin[4]=true;
 		}else if(intRank==intEnRank){
 			blnWin[2] = true;
 		} 
