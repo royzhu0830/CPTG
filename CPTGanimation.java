@@ -36,12 +36,14 @@ public class CPTGanimation extends JPanel {
 	boolean blnHelp = false; 
 	boolean blnConnection2 = false;
 	boolean blnSettings = false; 
+	boolean blnWaiting = false; 
 	
 	BufferedImage imgTitle = null; 
 	BufferedImage imgConnection = null; 
 	BufferedImage imgClient = null; 
 	BufferedImage imgHelp = null;
 	BufferedImage imgSettings = null; 
+	BufferedImage imgWaiting = null;
 	
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
@@ -208,6 +210,10 @@ public class CPTGanimation extends JPanel {
 		if(blnSettings == true){ 
 			g.drawImage(imgSettings,0,0,null);
 		}
+		if(blnWaiting == true){ 
+			g.drawImage(imgWaiting,0,0,null); 
+		
+		}
 	}
 	public CPTGanimation() {
 		super();
@@ -230,6 +236,11 @@ public class CPTGanimation extends JPanel {
 			}
 			try{ 
 				imgSettings = ImageIO.read(new File("Settings.png")); 
+			}catch(IOException e){ 
+				
+			}
+			try{
+				imgWaiting = ImageIO.read(new File("WaitingScreen.png")); 
 			}catch(IOException e){ 
 				
 			}

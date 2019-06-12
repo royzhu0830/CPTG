@@ -16,7 +16,7 @@ import javax.swing.event.*;
 -add header and make the game display look better
 
 */
-public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
+public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener, KeyListener { //no timer has been set to repaint, so do that
 	JFrame theframe;
 	CPTGanimation thepanel;
 	Timer thetimer;
@@ -36,6 +36,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	JLabel theIP;
 	JLabel reminder; 
 	JLabel portwarning; 
+	JLabel waiting;
 	JTextArea thearea;
 	int intTemp=-1;
 	int intTemp2;
@@ -63,6 +64,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	boolean blnSwap=true;
 	boolean blnHelp;
 	boolean blnSettings = false;
+	boolean blnStart=false;
 	String strTempPiece;
 	String strEnemyX="";
 	String strEnemyY="";
@@ -83,27 +85,35 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 	
 	public void actionPerformed(ActionEvent e) {
 		strName = thename.getText();
-		if(chrQuit == 'q'){ 
-			theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
+	
+	
+		try{ 
+			intPortNumber = Integer.parseInt(portnumber.getText());
+		}catch(NumberFormatException q){ 
+			intPortNumber = 0; 
+		} 
+		if(intPortNumber > 10000 || intPortNumber < 0){ 
+			intPortNumber = 0; 
+		} 
+		 
+		try{ 
+			intPortNumber2 = Integer.parseInt(portnumber2.getText());
+		}catch(NumberFormatException q){ 
+			intPortNumber2 = 0; 
+		} 
+		if(intPortNumber2 > 10000 || intPortNumber2 < 0){ 
+			intPortNumber2 = 0; 
+		} 
+		if(intPortNumber2 == 0 || intPortNumber == 0){ 
+			thepanel.add(portwarning); 
+		}else{ 
+			thepanel.remove(portwarning); 
 		}
-		if(blnSettings == true){
-			try{ 
-				intPortNumber = Integer.parseInt(portnumber.getText());
-			}catch(NumberFormatException q){ 
-				intPortNumber = 0; 
-			} 
-			if(intPortNumber > 10000 || intPortNumber < 0){ 
-				intPortNumber = 0; 
-			} 
-			if(intPortNumber == 0){ 
-				thepanel.add(portwarning); 
-			}else{ 
-				thepanel.remove(portwarning); 
-			}
-		}
+		
+		
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
-		} 
+		}  
 		if(e.getSource() == helpquitbutton){ 
 			thepanel.remove(helpquitbutton); 
 			thepanel.blnHelp = false; 
@@ -131,17 +141,15 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			System.out.println("button pressed");
 			if (blnClient == true){ 
 				ssm = new SuperSocketMaster(strClientAddress,intPortNumber,this);
-				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber,this); 
+				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber2,this); 
 				ssm.connect();
-				ssm2.connect();
-			}
-			thepanel.blnConnection2 = false; 
-			thepanel.blnGameboard = true;  
-			blnGame = true; 
-			thepanel.add(thebutton);
-			thepanel.remove(theclientfield); 
-			thepanel.remove(theclientbutton); 
-			blnConnection = false; 
+				ssm2.connect(); 
+				ssm.sendText("Start");
+				thepanel.blnWaiting = true;
+				thepanel.remove(theclientbutton); 
+				thepanel.remove(theclientfield);
+				
+			} 
 		}
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
@@ -168,7 +176,27 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		}else if (e.getSource()==ssm2) {
 			thearea.append(ssm2.readText() + "\n");
 		}else if (e.getSource()==ssm) {
-			if (thepanel.blnReady==false) {
+			if (blnServer==true && ssm.readText().equals("Start") && blnStart==false) {
+				thepanel.blnWaiting = false;
+				thepanel.blnConnection = false; 
+				thepanel.blnGameboard = true;  
+				blnGame = true; 
+				thepanel.add(thebutton);
+				thepanel.remove(thename); 
+				thepanel.remove(playbackbutton); 
+				blnConnection = false; 
+				thepanel.blnWaiting = true;
+				ssm.sendText("Start1");
+				blnStart=true;
+			}else if(blnClient==true && ssm.readText().equals("Start1")) {
+				thepanel.blnConnection2 = false; 
+				thepanel.blnGameboard = true;  
+				blnGame = true; 
+				thepanel.add(thebutton);
+				thepanel.remove(theclientfield); 
+				thepanel.remove(theclientbutton); 
+				blnConnection = false;
+			}else if (thepanel.blnReady==false) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
 					System.out.println(strSplit[j]+","+strSplit[j+1]);
@@ -346,19 +374,13 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 			if(e.getX() >= 138 && e.getX() <= 611 && e.getY() >= 390 && e.getY() <= 680){ 
 				blnServer = true; 
 				blnClient = false; 
-				thepanel.blnConnection = false; 
-				thepanel.blnGameboard = true;  
-				blnGame = true; 
-				thepanel.add(thebutton);
-				thepanel.remove(thename); 
-				thepanel.remove(playbackbutton); 
-				blnConnection = false; 
 				if (blnServer == true){ 
 					thepanel.remove(playbackbutton);
 					ssm = new SuperSocketMaster(intPortNumber,this);
-					ssm2 = new SuperSocketMaster(intPortNumber,this);
+					ssm2 = new SuperSocketMaster(intPortNumber2,this);
 					ssm.connect();
 					ssm2.connect(); 
+					ssm.sendText("Start");
 					theIP.setText("IP: "+ssm.getMyAddress());
 					thepanel.add(theIP);
 					System.out.println(ssm.getMyAddress());
@@ -544,7 +566,6 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		
 	}
 	public void keyPressed(KeyEvent e) {
-		
 	}
 	public void keyReleased(KeyEvent e) {
 		
@@ -559,6 +580,7 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		thepanel.setPreferredSize(new Dimension(1280,780));
 		thepanel.addMouseListener(this);
 		thepanel.addMouseMotionListener(this);
+		thepanel.addKeyListener(this);
 		
 		theframe = new JFrame("Game of Generals 2");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -617,10 +639,15 @@ public class CPTG2 implements ActionListener, MouseMotionListener, MouseListener
 		portwarning.setLocation(0,0); 
 		portwarning.setForeground(Color.red);
 		
+		waiting = new JLabel ("Waiting");
+		waiting.setSize(700,50); 
+		waiting.setLocation(500,500); 
+		waiting.setForeground(Color.red);
+		
 		theIP = new JLabel("");
 		theIP.setSize(300,50); 
-		theIP.setLocation(1150,0);
-		theIP.setForeground(Color.red);
+		theIP.setLocation(0,50);
+		theIP.setForeground(Color.yellow);
 
 		thearea = new JTextArea(""); 
 		thearea.setSize(250,150); 

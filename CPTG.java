@@ -16,7 +16,7 @@ import javax.swing.event.*;
 -add header and make the game display look better
 
 */
-public class CPTG implements ActionListener, MouseMotionListener, MouseListener { //no timer has been set to repaint, so do that
+public class CPTG implements ActionListener, MouseMotionListener, MouseListener, KeyListener { //no timer has been set to repaint, so do that
 	JFrame theframe;
 	CPTGanimation thepanel;
 	Timer thetimer;
@@ -55,8 +55,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	int intDeadY = 10;
 	int intDeadX2 = 800; 
 	int intDeadY2 = 300; 
-	int intPortNumber; 
-	int intPortNumber2; 
+	int intPortNumber=6; 
+	int intPortNumber2=9; 
+	boolean blnStart = false;
 	boolean blnTurn=true;
 	boolean blnWin[] = new boolean[5];
 	boolean blnActivate = false;
@@ -67,7 +68,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	String strEnemyX="";
 	String strEnemyY="";
 	String strName="bob"; 
-	String strSplit[];
+	String strSplit[]=new String [48];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
 	SuperSocketMaster ssm2;
@@ -83,27 +84,35 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 	
 	public void actionPerformed(ActionEvent e) {
 		strName = thename.getText();
-		if(chrQuit == 'q'){ 
-			theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
+	
+	
+		try{ 
+			intPortNumber = Integer.parseInt(portnumber.getText());
+		}catch(NumberFormatException q){ 
+			intPortNumber = 0; 
+		} 
+		if(intPortNumber > 10000 || intPortNumber < 0){ 
+			intPortNumber = 0; 
+		} 
+		 
+		try{ 
+			intPortNumber2 = Integer.parseInt(portnumber2.getText());
+		}catch(NumberFormatException q){ 
+			intPortNumber2 = 0; 
+		} 
+		if(intPortNumber2 > 10000 || intPortNumber2 < 0){ 
+			intPortNumber2 = 0; 
+		} 
+		if(intPortNumber2 == 0 || intPortNumber == 0){ 
+			thepanel.add(portwarning); 
+		}else{ 
+			thepanel.remove(portwarning); 
 		}
-		if(blnSettings == true){
-			try{ 
-				intPortNumber = Integer.parseInt(portnumber.getText());
-			}catch(NumberFormatException q){ 
-				intPortNumber = 0; 
-			} 
-			if(intPortNumber > 10000 || intPortNumber < 0){ 
-				intPortNumber = 0; 
-			} 
-			if(intPortNumber == 0){ 
-				thepanel.add(portwarning); 
-			}else{ 
-				thepanel.remove(portwarning); 
-			}
-		}
+		
+		
 		if (e.getSource()==thetimer) {
 			thepanel.repaint();
-		} 
+		}  
 		if(e.getSource() == helpquitbutton){ 
 			thepanel.remove(helpquitbutton); 
 			thepanel.blnHelp = false; 
@@ -131,17 +140,18 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			System.out.println("button pressed");
 			if (blnClient == true){ 
 				ssm = new SuperSocketMaster(strClientAddress,intPortNumber,this);
-				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber,this); 
+				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber2,this); 
 				ssm.connect();
 				ssm2.connect();
+				ssm2.sendText("Start");
 			}
-			thepanel.blnConnection2 = false; 
+			/*thepanel.blnConnection2 = false; 
 			thepanel.blnGameboard = true;  
 			blnGame = true; 
 			thepanel.add(thebutton);
 			thepanel.remove(theclientfield); 
 			thepanel.remove(theclientbutton); 
-			blnConnection = false; 
+			blnConnection = false; */
 		}
 		if (e.getSource()==thebutton) {
 			thepanel.remove(thebutton);
@@ -149,6 +159,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			thepanel.add(thetextfield); 
 			//thepanel.add(thearea);
 			thepanel.add(thescroll); 
+			thepanel.remove(theIP);
 			blnActivate = true;
 			blnSwap=false;
 			if (blnClient==true) {
@@ -167,11 +178,37 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			
 		}else if (e.getSource()==ssm2) {
 			thearea.append(ssm2.readText() + "\n");
+			if (blnServer==true && ssm2.readText().equals("Start") && blnStart==false) {
+				thepanel.blnWaiting = false;
+				System.out.println("Sex");
+				thepanel.blnConnection = false; 
+				thepanel.blnGameboard = true;  
+				blnGame = true; 
+				thepanel.add(thebutton);
+				thepanel.remove(thename); 
+				thepanel.remove(playbackbutton); 
+				blnConnection = false; 
+			//	thepanel.blnWaiting = true;
+				ssm2.sendText("Ready");
+				blnStart=true;
+			}else if(blnClient==true && ssm2.readText().equals("Ready")) {
+				thepanel.blnWaiting = false;
+				thepanel.blnConnection2 = false; 
+				thepanel.blnGameboard = true;  
+				blnGame = true; 
+				thepanel.add(thebutton);
+				thepanel.remove(theclientfield); 
+				thepanel.remove(theclientbutton); 
+				blnConnection = false;
+			}
 		}else if (e.getSource()==ssm) {
+			
+			i=0;
+			j=0;
 			if (thepanel.blnReady==false) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
-					System.out.println(strSplit[j]+","+strSplit[j+1]);
+					//System.out.println(strSplit[j]+","+strSplit[j+1]);
 					try{
 						intEX=Integer.parseInt(strSplit[j]);
 						intEY=Integer.parseInt(strSplit[j+1]);
@@ -208,8 +245,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 					}
 					i++;
 					j=j+2;
-					strSplit[0]=null;
-					strSplit[1]=null;
 				}
 				
 				j=0;
@@ -346,21 +381,19 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 			if(e.getX() >= 138 && e.getX() <= 611 && e.getY() >= 390 && e.getY() <= 680){ 
 				blnServer = true; 
 				blnClient = false; 
-				thepanel.blnConnection = false; 
-				thepanel.blnGameboard = true;  
-				blnGame = true; 
-				thepanel.add(thebutton);
 				thepanel.remove(thename); 
 				thepanel.remove(playbackbutton); 
 				blnConnection = false; 
 				if (blnServer == true){ 
 					thepanel.remove(playbackbutton);
 					ssm = new SuperSocketMaster(intPortNumber,this);
-					ssm2 = new SuperSocketMaster(intPortNumber,this);
+					ssm2 = new SuperSocketMaster(intPortNumber2,this);
 					ssm.connect();
 					ssm2.connect(); 
 					theIP.setText("IP: "+ssm.getMyAddress());
 					thepanel.add(theIP);
+					thepanel.blnWaiting = true; 
+					//ssm2.sendText("Start");
 					System.out.println(ssm.getMyAddress());
 				}
 				
@@ -544,7 +577,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		
 	}
 	public void keyPressed(KeyEvent e) {
-		
 	}
 	public void keyReleased(KeyEvent e) {
 		
@@ -559,8 +591,9 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thepanel.setPreferredSize(new Dimension(1280,780));
 		thepanel.addMouseListener(this);
 		thepanel.addMouseMotionListener(this);
+		thepanel.addKeyListener(this);
 		
-		theframe = new JFrame("Game of Generals 1");
+		theframe = new JFrame("Game of Generals 2");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		thebutton = new JButton("Ready!");
@@ -602,12 +635,12 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener 
 		thename.setLocation(500,175);
 		thename.addActionListener(this);
 
-		portnumber = new JTextField(""); 
+		portnumber = new JTextField("6"); 
 		portnumber.setSize(250,25); 
 		portnumber.setLocation(289,170); 
 		portnumber.addActionListener(this);
 		
-		portnumber2 = new JTextField(""); 
+		portnumber2 = new JTextField("9"); 
 		portnumber2.setSize(250,25); 
 		portnumber2.setLocation(289,269); 
 		portnumber2.addActionListener(this);
