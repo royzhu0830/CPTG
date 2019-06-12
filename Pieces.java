@@ -46,7 +46,7 @@ public class Pieces {
 		if(intRank > intEnRank){ 
 			blnWin[0] = false;
 			if (intRank == 14 && intEnRank==-1){ 
-				blnWin[1] = false;
+				blnWin[0]=true;
 			}else if(intRank==15) {
 				blnWin[3]=true;
 			}

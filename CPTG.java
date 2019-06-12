@@ -548,6 +548,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 							intDeadX2=840;
 						}
 					}
+					System.out.println(thepanel.Piece[intTemp].getIntRank() + " " + thepanel.EnPiece[i].getIntRank() + " " + intTemp);
 					if(blnWin[1] == true){ 
 						//Win Screen 
 						System.out.println("Win");

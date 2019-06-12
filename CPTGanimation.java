@@ -85,7 +85,7 @@ public class CPTGanimation extends JPanel {
 		}
 		g.setColor(Color.BLACK);
 		if(blnFirstTime==true) {
-				intCounter=0;
+			intCounter=0;
 			Piece[intCounter]=new Pieces(img5G,intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
 			intCounter++;
 			Piece[intCounter]=new Pieces(img4G,intCounter,0,0);
@@ -110,11 +110,9 @@ public class CPTGanimation extends JPanel {
 			intCounter++;
 			Piece[intCounter]=new Pieces(imgSerg,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces(imgPrivate,-1,0,0);
+			Piece[intCounter]=new Pieces(imgSpy,-1,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces(imgPrivate,-1,0,0);
-			intCounter++;
-			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
+			Piece[intCounter]=new Pieces(imgSpy,-1,0,0);
 			intCounter++;
 			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
@@ -122,9 +120,11 @@ public class CPTGanimation extends JPanel {
 			intCounter++;
 			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces(imgSpy,14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces(imgSpy,14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
+			intCounter++;
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
 			Piece[intCounter]=new Pieces(imgFlag,15,0,0);
 			intCounter++;
@@ -178,7 +178,7 @@ public class CPTGanimation extends JPanel {
 			EnPiece[i]=new Pieces(imgWhite,16,0,0);
 			}	
 			intCounter=0;
-			for (int i=1; i<28; i++) { //i variable decides which piece and where it is                                                                                                              b
+			for (int i=1; i<28; i++) { //i variable decides which piece and where it is 
 				if (i==1) {
 					Piece[0].setIntY(intDeltaBoard*5);
 					Piece[0].setIntX(0);
