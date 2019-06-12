@@ -45,6 +45,24 @@ public class CPTGanimation extends JPanel {
 	BufferedImage imgSettings = null; 
 	BufferedImage imgWaiting = null;
 	
+	BufferedImage img5G = null; 
+	BufferedImage img4G = null; 
+	BufferedImage img3G = null; 
+	BufferedImage img2G = null; 
+	BufferedImage img1G = null; 
+	BufferedImage imgCol = null; 
+	BufferedImage imgLt = null; 
+	BufferedImage imgMaj = null; 
+	BufferedImage imgCap = null; 
+	BufferedImage img1L = null; 
+	BufferedImage img2L = null; 
+	BufferedImage imgSerg = null; 
+	BufferedImage imgPrivate = null; 
+	BufferedImage imgSpy = null; 
+	BufferedImage imgFlag = null; 
+	BufferedImage imgEnemy = null; 
+	BufferedImage imgWhite = null; 
+	
 	public void paintComponent(Graphics g) {
 		g.fillRect(0,0,2040,900);
 		g.fillRect(0,0,2000,1000);
@@ -67,104 +85,104 @@ public class CPTGanimation extends JPanel {
 		}
 		g.setColor(Color.BLACK);
 		if(blnFirstTime==true) {
-			intCounter=0;
-			Piece[intCounter]=new Pieces("5G",intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
+				intCounter=0;
+			Piece[intCounter]=new Pieces(img5G,intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
 			intCounter++;
-			Piece[intCounter]=new Pieces("4G",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img4G,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("3G",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img3G,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("2G",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img2G,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("1G",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img1G,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Col",intCounter,0,0);
+			Piece[intCounter]=new Pieces(imgCol,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("L. Col",intCounter,0,0);
+			Piece[intCounter]=new Pieces(imgLt,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Maj",intCounter,0,0);
+			Piece[intCounter]=new Pieces(imgMaj,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Cap",intCounter,0,0);
+			Piece[intCounter]=new Pieces(imgCap,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("1 L.",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img1L,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("2 L.",intCounter,0,0);
+			Piece[intCounter]=new Pieces(img2L,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Serg",intCounter,0,0);
+			Piece[intCounter]=new Pieces(imgSerg,intCounter,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Spy",-1,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,-1,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Spy",-1,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,-1,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri1",14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri2",14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri3",14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri4",14,0,0);
+			Piece[intCounter]=new Pieces(imgPrivate,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri5",14,0,0);
+			Piece[intCounter]=new Pieces(imgSpy,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Pri6",14,0,0);
+			Piece[intCounter]=new Pieces(imgSpy,14,0,0);
 			intCounter++;
-			Piece[intCounter]=new Pieces("Flag",15,0,0);
+			Piece[intCounter]=new Pieces(imgFlag,15,0,0);
 			intCounter++;
 			for (int i=intCounter; i<28; i++) {
-				Piece[i]=new Pieces("",16,0,0);
+				Piece[i]=new Pieces(imgWhite,16,0,0);
 			}	
 			intCounter=0;
-			EnPiece[intCounter]=new Pieces("En5G",intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0); //all pieces, highest to lowest rank, spy and priv. outside of order
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En4G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En3G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En2G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En1G",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnCol",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnL. Col",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnMaj",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnCap",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En1 L.",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("En2 L.",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnSerg",intCounter,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,intCounter,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnSpy",-1,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,-1,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnSpy",-1,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,-1,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri1",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri2",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri3",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri4",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri5",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnPri6",14,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,14,0,0);
 			intCounter++;
-			EnPiece[intCounter]=new Pieces("EnFlag",15,0,0);
+			EnPiece[intCounter]=new Pieces(imgEnemy,15,0,0);
 			intCounter++;
 			for (int i=intCounter; i<28; i++) {
-				EnPiece[i]=new Pieces("",16,0,0);
+			EnPiece[i]=new Pieces(imgWhite,16,0,0);
 			}	
 			intCounter=0;
 			for (int i=1; i<28; i++) { //i variable decides which piece and where it is                                                                                                              b
 				if (i==1) {
 					Piece[0].setIntY(intDeltaBoard*5);
 					Piece[0].setIntX(0);
-					g.drawString(Piece[0].getStrPiece(),Piece[0].getIntX(),Piece[0].getIntY());
+					g.drawImage(Piece[0].getimgPiece(),Piece[0].getIntX(),Piece[0].getIntY(),null);
 				}
 				Piece[i].setIntX(Piece[i-1].getIntX()+intDeltaBoard);
 				if(i==9 || i==18){
@@ -177,14 +195,13 @@ public class CPTGanimation extends JPanel {
 				}else {
 					Piece[i].setIntY(intDeltaBoard*7);
 				}
-				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
+				g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
 			}
 			blnFirstTime=false;
 		}else if (blnFirstTime==false) {//fix identation if it works
-			for (int i=0; i<21; i++) {
-				g.setColor(Color.BLUE);
-				g.drawString(Piece[i].getStrPiece(),Piece[i].getIntX(),Piece[i].getIntY());
-				g.drawString(EnPiece[i].getStrPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY());
+				for (int i=0; i<21; i++) {
+					g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
+					g.drawImage(EnPiece[i].getimgPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY(),null);
 			}
 		} 
 		if(blnDead == true){ 
@@ -231,18 +248,83 @@ public class CPTGanimation extends JPanel {
 			}
 			try{ 
 				imgHelp = ImageIO.read(new File("HelpScreen.png")); 
-			}catch(IOException e){ 
-				
+			}catch(IOException e){ 	
 			}
 			try{ 
 				imgSettings = ImageIO.read(new File("Settings.png")); 
 			}catch(IOException e){ 
-				
 			}
 			try{
 				imgWaiting = ImageIO.read(new File("WaitingScreen.png")); 
 			}catch(IOException e){ 
-				
+			}
+			try{ 
+				img5G = ImageIO.read(new File("5G.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img4G = ImageIO.read(new File("4G.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img3G = ImageIO.read(new File("3G.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img2G = ImageIO.read(new File("2G.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img1G = ImageIO.read(new File("1G.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgCol = ImageIO.read(new File("Col.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgLt = ImageIO.read(new File("Lt.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgMaj = ImageIO.read(new File("Maj.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgCap = ImageIO.read(new File("Cap.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img1L = ImageIO.read(new File("1L.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				img2L = ImageIO.read(new File("2L.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgEnemy = ImageIO.read(new File("Enemy.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgWhite = ImageIO.read(new File("White.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgSerg = ImageIO.read(new File("Serg.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgPrivate = ImageIO.read(new File("Private.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgSpy = ImageIO.read(new File("Spy.png")); 
+			}catch (IOException e){ 
+			}
+			try{ 
+				imgFlag = ImageIO.read(new File("Flag.png")); 
+			}catch (IOException e){ 
 			}
 	}
 }

@@ -1,8 +1,11 @@
 //testing 123
+import javax.imageio.*;
+import java.awt.image.*;
+
 public class Pieces {
 	//properties
 	/**name of the piece*/
-	public String strPiece;
+	public BufferedImage imgPiece;
 	/**number corresponding to rank of piece; lower rank=stronger*/
 	public int intRank;
 	/**X-coordinate of the piece*/
@@ -14,8 +17,8 @@ public class Pieces {
 	
 	//methods
 	/**gets the name of the piece*/
-	public String getStrPiece() {
-		return strPiece;
+	public BufferedImage getimgPiece() {
+		return imgPiece;
 	}
 	/**gets the rank of the piece*/
 	public int getIntRank() {
@@ -40,33 +43,31 @@ public class Pieces {
 	/**determines outcome of conflict*/
 	public boolean[] battle(int intRank, int intEnRank){
 		boolean blnWin[] = new boolean [5];
-		if(intRank > intEnRank){  //if player loses
+		if(intRank > intEnRank){ 
 			blnWin[0] = false;
-			if(intRank == 14 && intEnRank==-1){ //if spy vs private
-				blnWin[0] = true;
-			}else if (intRank == 15){ //if the flag is killed
-				blnWin[3] = true;
+			if (intRank == 14 && intEnRank==-1){ 
+				blnWin[1] = false;
+			}else if(intRank==15) {
+				blnWin[3]=true;
 			}
 		}else if (intRank < intEnRank){
 			blnWin[0] = true;
-			if (intEnRank==14 && intRank==-1) {
-				blnWin[0]=false;
+			if(intEnRank == 14 && intRank==-1){
+				blnWin[0] = false; 
 			}else if (intEnRank == 15){ 
 				blnWin[1] = true;
 			}
 		}else if (intRank == 15 && intEnRank == 15){
-			blnWin[4]=true;
-		}else if(intRank==intEnRank){
+			blnWin[4] = true;
+		}else if (intRank==intEnRank){
 			blnWin[2] = true;
 		} 
 		return blnWin;
-
-		
 	}
 	
 	//constructor
-	public Pieces(String strPiece,int intRank, int intX, int intY) {
-		this.strPiece = strPiece;
+	public Pieces(BufferedImage imgPiece,int intRank, int intX, int intY) {
+		this.imgPiece = imgPiece;
 		this.intRank = intRank;
 		//this.intX=intX;
 		//this.intY=intY;
