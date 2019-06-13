@@ -22,9 +22,7 @@ public class CPTGanimation extends JPanel {
 	Pieces[] EnPiece = new Pieces[28];
 	boolean blnFirstTime=true;
 	boolean blnReady=false;
-	boolean blnEnReady=false;
 	boolean blnDead = false; 
-	int intLength;
 	int intCounter;
 	int intDeadX = 890; 
 	int intDeadY = 110;

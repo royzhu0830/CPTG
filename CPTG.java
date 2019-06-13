@@ -6,17 +6,6 @@ import javax.swing.event.*;
 import java.io.IOException;  
 import java.io.FileWriter; 
 
-//game of the generals, 
-/*TO DO LIST:
--determine winner and loser (create winner/loser page)
--create loading screen on server while client connects to server
--add pics of pieces
-	-determine positioning of dead pieces
--settings page with port number
--change client page from port number to IP address
-***REMEMBER to utilize file io
--add header and make the game display look better
-*/
 public class CPTG implements ActionListener, MouseMotionListener, MouseListener, KeyListener { //no timer has been set to repaint, so do that
 	//variables
 	JFrame theframe;
@@ -47,10 +36,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 	int intTemp3;
 	int intTempX;
 	int intTempY;
-	int intLength;
 	int i=0;
 	int j=0;
-	int intRndNumbr;
 	int intSplitX=0;
 	int intSplitY=0;
 	int intEX;
@@ -92,7 +79,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 
 		//Get username
 		strName = thename.getText();
-		//port number
+		//port number for game
 		try{ 
 			intPortNumber = Integer.parseInt(portnumber.getText());
 		}catch(NumberFormatException q){ 
@@ -101,7 +88,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 		if(intPortNumber > 10000 || intPortNumber < 0){ 
 			intPortNumber = 0; 
 		} 
-		 
+		//port number for noob chat
 		try{ 
 			intPortNumber2 = Integer.parseInt(portnumber2.getText());
 		}catch(NumberFormatException q){ 
@@ -115,9 +102,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 		}else{ 
 			thepanel.remove(portwarning); 
 		}
+		//quit button
 		if(e.getSource() == quitbutton){ 
 			theframe.dispatchEvent(new WindowEvent(theframe, WindowEvent.WINDOW_CLOSING));
 		}
+		//restart button
 		if(e.getSource() == restartbutton){ 
 			thepanel.blnFirstTime = true; 
 			blnSwap = true;
@@ -157,7 +146,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 			thepanel.remove(restartbutton);
 			thepanel.remove(thesendbutton);
 			thepanel.remove(thetextfield); 
-			//thepanel.add(thearea);
 			thepanel.remove(thescroll);
 			blnServer = false; 
 			blnClient = false; 
@@ -180,7 +168,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 			strClientAddress = theclientfield.getText();
 			thepanel.remove(thename); 
 			thepanel.remove(mainmenubutton);
-			System.out.println("button pressed");
 			if (blnClient == true){ 
 				ssm = new SuperSocketMaster(strClientAddress,intPortNumber,this);
 				ssm2 = new SuperSocketMaster(strClientAddress,intPortNumber2,this); 
@@ -205,7 +192,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 			thepanel.remove(thebutton);
 			thepanel.add(thesendbutton);
 			thepanel.add(thetextfield); 
-			//thepanel.add(thearea);
 			thepanel.add(thescroll); 
 			thepanel.remove(theIP);
 			blnActivate = true;
@@ -217,6 +203,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				blnTurn = true;
 			}
 			i=0;
+			//send coordinates of pieces
 			while (i<21) {
 				strCoordinates.append(String.valueOf(thepanel.Piece[i].getIntX()) + "," + String.valueOf(thepanel.Piece[i].getIntY())+",");
 				i++;
@@ -261,7 +248,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 			if (thepanel.blnReady==false) {
 				strSplit=ssm.readText().split(",");
 				while (i<21) {
-					//System.out.println(strSplit[j]+","+strSplit[j+1]);
 					try{
 						intEX=Integer.parseInt(strSplit[j]);
 						intEY=Integer.parseInt(strSplit[j+1]);
@@ -269,7 +255,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 						thepanel.EnPiece[i].setIntX(0);
 						thepanel.EnPiece[i].setIntY(0);
 					}
-					// code for when ssm is fixed; used to determine location of enemy pieces.
+					// determine location of enemy pieces.
 					if (intEY==thepanel.intDeltaBoard*5) {
 						thepanel.EnPiece[i].setIntY(thepanel.intDeltaBoard*2);
 					}else if (intEY==thepanel.intDeltaBoard*6) {
@@ -302,7 +288,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				
 				j=0;
 				thepanel.blnReady=true;
-				//blnSwap=false;
 			}else{
 				strSplit=ssm.readText().split(",");
 				try{
@@ -325,11 +310,20 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 					thepanel.add(restartbutton); 
 					thepanel.add(quitbutton);
 					blnActivate = false;
+					intEnDead=0;
+					intScore=intScore+1;
+					intDeadX=800;
+					intDeadY=10;
+					thepanel.blnReady=false;
 				}else if (thepanel.EnPiece[20].getIntY()==595){
 					thepanel.blnLose = true; 
 					thepanel.add(restartbutton); 
 					thepanel.add(quitbutton);
 					blnActivate = false;
+					intEnDead=0;
+					intDeadX=800;
+					intDeadY=10;
+					thepanel.blnReady=false;
 				}
 				blnTurn=true;
 				i=0;
@@ -339,21 +333,14 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 					if(thepanel.Piece[i].getIntX()==thepanel.EnPiece[intEnI].getIntX() && thepanel.Piece[i].getIntY()==thepanel.EnPiece[intEnI].getIntY()) {
 						thepanel.add(deadpiecelabel);
 						blnWin=thepanel.Piece[i].battle(thepanel.Piece[i].getIntRank(),thepanel.EnPiece[intEnI].getIntRank()); 
-						System.out.println("Your: "+thepanel.Piece[i].getIntRank());
-						System.out.println("Enemy: "+thepanel.EnPiece[intEnI].getIntRank());
-						System.out.println("CPTG");
-						System.out.println(blnWin[0] + " " + blnWin[1] + " " + blnWin[2] + " " + blnWin[3] + " " + blnWin[4]);
 						if (blnWin[4]==true) {
-							System.out.println("Both died");
 							thepanel.Piece[i].setIntX(intDeadX);
 							thepanel.Piece[i].setIntY(intDeadY);
 						}else if (blnWin[2]==true) {
-							System.out.println("Both die");
 							thepanel.Piece[i].setIntX(intDeadX); 
 							thepanel.Piece[i].setIntY(intDeadY);
 							thepanel.EnPiece[intEnI].setIntX(3000);
 							thepanel.EnPiece[intEnI].setIntY(3000);
-							
 							intDeadX=intDeadX+90;
 							intEnDead++;
 							deadpiecelabel.setText("Enemy Pieces Defeated: " + intEnDead);
@@ -362,7 +349,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 								intDeadX=800;
 							}
 						}else if(blnWin[0] == false){
-							System.out.println("Battle lose");
 							thepanel.Piece[i].setIntX(intDeadX); 
 							thepanel.Piece[i].setIntY(intDeadY);
 							intDeadX = intDeadX + 90; 
@@ -371,7 +357,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 								intDeadX=800;
 							}
 						}else if (blnWin[0] == true){ 
-							System.out.println("Battle win");
 							intEnDead++;
 							deadpiecelabel.setText("Enemy Pieces Defeated: " + intEnDead);
 							thepanel.EnPiece[intEnI].setIntX(3000);
@@ -384,8 +369,12 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 							thepanel.add(restartbutton); 
 							thepanel.add(quitbutton);
 							thepanel.remove(deadpiecelabel);
-						
+							intEnDead=0;
+							intScore=intScore+1;
 							blnActivate = false;
+							intDeadX=800;
+							intDeadY=10;
+							thepanel.blnReady=false;
 							//Lose Screen
 						}else if (blnWin[3] == true){ 
 							thepanel.blnLose = true; 
@@ -393,7 +382,10 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 							thepanel.add(quitbutton);
 							thepanel.remove(deadpiecelabel);
 							blnActivate = false;
-					
+							intEnDead=0; 
+							intDeadX=800;
+							thepanel.blnReady=false;
+							intDeadY=10;
 						}
 					}
 					i++;
@@ -539,53 +531,52 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				}
 				i++;
 			}
-			if (intTempX>e.getX() && intTempX-thepanel.intDeltaBoard<=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY()) {
-				System.out.println("Left");
+			if (intTempX>e.getX() && intTempX-thepanel.intDeltaBoard<=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY() && intTempX-thepanel.intDeltaBoard>=0) {
 				thepanel.Piece[intTemp].setIntX(intTempX-thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntY(intTempY);
 				ssm.sendText("L,"+String.valueOf(intTemp));
 				blnTurn=false;
-			}else if(intTempX+thepanel.intDeltaBoard<e.getX() && intTempX+(2*thepanel.intDeltaBoard)>=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY()) {
-				System.out.println("Right");
+			}else if(intTempX+thepanel.intDeltaBoard<e.getX() && intTempX+(2*thepanel.intDeltaBoard)>=e.getX() && intTemp3==-1 && intTempY<=e.getY() && intTempY+thepanel.intDeltaPiece>e.getY() && intTempX+thepanel.intDeltaBoard<765) {
 				thepanel.Piece[intTemp].setIntX(intTempX+thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntY(intTempY);
 				ssm.sendText("R,"+String.valueOf(intTemp));
 				blnTurn=false;
-			}else if (intTempY>e.getY() && intTempY-thepanel.intDeltaBoard<=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX()) {
-				System.out.println("Up");
+			}else if (intTempY>e.getY() && intTempY-thepanel.intDeltaBoard<=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX() && intTempY-thepanel.intDeltaBoard>=0) {
 				thepanel.Piece[intTemp].setIntY(intTempY-thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				ssm.sendText("U,"+String.valueOf(intTemp));
 				blnTurn=false;
-			}else if(intTempY+thepanel.intDeltaBoard<e.getY() && intTempY+(2*thepanel.intDeltaBoard)>=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX()) {
-				System.out.println("down");
+			}else if(intTempY+thepanel.intDeltaBoard<e.getY() && intTempY+(2*thepanel.intDeltaBoard)>=e.getY() && intTemp3==-1 && intTempX<=e.getX() && intTempX + thepanel.intDeltaPiece>e.getX() && intTempY+thepanel.intDeltaBoard<680) {
 				thepanel.Piece[intTemp].setIntY(intTempY+thepanel.intDeltaBoard);
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				ssm.sendText("D,"+String.valueOf(intTemp));
 				blnTurn=false;
 			}else if (intTemp!=-1){
-				System.out.println("Stay");
 				thepanel.Piece[intTemp].setIntX(intTempX);
 				thepanel.Piece[intTemp].setIntY(intTempY);
 			}
 			if (thepanel.Piece[20].getIntY()==0) {
-				System.out.println("Win by getting to other side");
 				thepanel.blnWin = true; 
 				thepanel.add(restartbutton); 
 				thepanel.add(quitbutton);
 				blnActivate = false;
-				System.out.println("Win");
 				thepanel.remove(deadpiecelabel);
+				intEnDead=0;
+				intScore=intScore+1;
+				thepanel.blnReady=false;
+				intDeadX=800;
+				intDeadY=10;
 				
 			}else if (thepanel.EnPiece[20].getIntY()==595){
-				System.out.println("Lose by getting to other side");
 				thepanel.blnLose = true; 
 				thepanel.add(restartbutton); 
 				thepanel.add(quitbutton);
 				blnActivate = false;
-				System.out.println("Lose");
 				thepanel.remove(deadpiecelabel);
-			
+				thepanel.blnReady=false;
+				intEnDead=0;
+				intDeadX=800;
+				intDeadY=10;
 			}
 			
 				//battle conditions
@@ -594,22 +585,15 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				if(thepanel.Piece[intTemp].getIntX()==thepanel.EnPiece[i].getIntX() && thepanel.Piece[intTemp].getIntY()==thepanel.EnPiece[i].getIntY()) {
 					thepanel.add(deadpiecelabel);
 					blnWin=null;
-					System.out.println(intTemp);
 					blnWin=thepanel.Piece[intTemp].battle(thepanel.Piece[intTemp].getIntRank(),thepanel.EnPiece[i].getIntRank()); 
-					System.out.println("Your: "+thepanel.Piece[intTemp].getIntRank());
-					System.out.println("Enemy: "+thepanel.EnPiece[i].getIntRank());
-					System.out.println("CPTG");
-					System.out.println(blnWin[0] + " " + blnWin[1] + " " + blnWin[2]);
-					if (blnWin[4]==true) {
+					if (blnWin[4]==true) { //both died
 						blnWin[1]=true;
-						System.out.println("Both died");
 					}else if (blnWin[2]==true) {
-						System.out.println("Both die");
 						thepanel.Piece[intTemp].setIntX(intDeadX); 
 						thepanel.Piece[intTemp].setIntY(intDeadY);
 						thepanel.EnPiece[i].setIntX(3000);
 						thepanel.EnPiece[i].setIntY(3000);
-						
+						intEnDead=intEnDead+1;
 						deadpiecelabel.setText("Enemy Pieces Defeated: " + intEnDead);
 						intDeadX=intDeadX+90;
 						if (intDeadX>1195) {
@@ -617,7 +601,6 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 							intDeadX=800;
 						}
 					}else if(blnWin[0] == false){
-						System.out.println("Battle lose");
 						thepanel.Piece[intTemp].setIntX(intDeadX); 
 						thepanel.Piece[intTemp].setIntY(intDeadY);
 						intDeadX = intDeadX + 90; 
@@ -626,32 +609,34 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 							intDeadX=800;
 						}
 					}else if (blnWin[0] == true){ 
-						System.out.println("Battle win");
-						
 						intEnDead++;
 						deadpiecelabel.setText("Enemy Pieces Defeated: " + intEnDead);
 						thepanel.EnPiece[i].setIntX(3000);
 						thepanel.EnPiece[i].setIntY(3000);
 					}
-					System.out.println(thepanel.Piece[intTemp].getIntRank() + " " + thepanel.EnPiece[i].getIntRank() + " " + intTemp);
 					if(blnWin[1] == true){ 
 						//Win Screen 
 						thepanel.blnWin = true; 
 						thepanel.add(restartbutton); 
 						thepanel.add(quitbutton);
 						blnActivate = false;
-						System.out.println("Win");
+						thepanel.blnReady=false;
 						thepanel.remove(deadpiecelabel);
-						
+						intScore=intScore+1;
+						intEnDead=0;
+						intDeadX=800;
+						intDeadY=10;
 					}else if (blnWin[3] == true){ 
 						//Lose Screen
 						thepanel.blnLose = true; 
 						thepanel.add(restartbutton); 
 						thepanel.add(quitbutton);
 						blnActivate = false;
-						System.out.println("Lose");
+						thepanel.blnReady=false;
 						thepanel.remove(deadpiecelabel);
-					
+						intEnDead=0;
+						intDeadX=800;
+						intDeadY=10;
 					}
 				}
 			i++;
