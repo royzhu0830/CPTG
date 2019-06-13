@@ -28,6 +28,10 @@ public class CPTGanimation extends JPanel {
 	int intCounter;
 	int intDeadX = 890; 
 	int intDeadY = 110;
+	int intDisplayX=102;
+	int intDisplayY=690;
+	boolean blnWin = false; 
+	boolean blnLose = false;
 	
 	boolean blnMenu = true;
 	boolean blnConnection = false; 
@@ -44,6 +48,8 @@ public class CPTGanimation extends JPanel {
 	BufferedImage imgHelp = null;
 	BufferedImage imgSettings = null; 
 	BufferedImage imgWaiting = null;
+	BufferedImage imgWin = null; 
+	BufferedImage imgLose = null;
 	
 	BufferedImage img5G = null; 
 	BufferedImage img4G = null; 
@@ -199,10 +205,22 @@ public class CPTGanimation extends JPanel {
 			}
 			blnFirstTime=false;
 		}else if (blnFirstTime==false) {//fix identation if it works
-				for (int i=0; i<21; i++) {
-					g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
-					g.drawImage(EnPiece[i].getimgPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY(),null);
+			for (int i=0; i<21; i++) {
+				g.setColor(Color.BLUE);
+				g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
+				g.drawImage(EnPiece[i].getimgPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY(),null);
+				if(i==12) {
+					g.drawImage(Piece[i].getimgPiece(),10,intDisplayY,null);
+				}else if(i<15 && i!=13) {
+					g.drawImage(Piece[i].getimgPiece(),intDisplayX,intDisplayY,null);
+					intDisplayX=intDisplayX+92;
+				}
+				g.setColor(Color.GREEN);
+				g.drawString("Ranking from greatest-->lowest",1070,670);
+				g.drawString("*Note: Spy can be killed by piece to the far right",969,690);
 			}
+			intDisplayX=102;
+			
 		} 
 		if(blnDead == true){ 
 			g.setColor(Color.RED);
@@ -231,6 +249,13 @@ public class CPTGanimation extends JPanel {
 			g.drawImage(imgWaiting,0,0,null); 
 		
 		}
+		if(blnWin == true){ 
+			g.drawImage(imgWin,0,0,null); 
+		}
+		if(blnLose == true){ 
+			g.drawImage(imgLose,0,0,null); 
+		}
+		
 	}
 	public CPTGanimation() {
 		super();
@@ -325,6 +350,14 @@ public class CPTGanimation extends JPanel {
 			try{ 
 				imgFlag = ImageIO.read(new File("Flag.png")); 
 			}catch (IOException e){ 
+			}
+			try{ 
+			imgWin = ImageIO.read(new File("WinningScreen.png"));
+			}catch(IOException e){ 
+			}
+			try{
+				imgLose = ImageIO.read(new File("LosingScreen.png"));
+			}catch(IOException e){ 
 			}
 	}
 }
