@@ -28,6 +28,9 @@ public class CPTGanimation extends JPanel {
 	int intCounter;
 	int intDeadX = 890; 
 	int intDeadY = 110;
+	int intDisplayX=102;
+	int intDisplayY=690;
+	
 	
 	boolean blnMenu = true;
 	boolean blnConnection = false; 
@@ -199,10 +202,22 @@ public class CPTGanimation extends JPanel {
 			}
 			blnFirstTime=false;
 		}else if (blnFirstTime==false) {//fix identation if it works
-				for (int i=0; i<21; i++) {
-					g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
-					g.drawImage(EnPiece[i].getimgPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY(),null);
+			for (int i=0; i<21; i++) {
+				g.setColor(Color.BLUE);
+				g.drawImage(Piece[i].getimgPiece(),Piece[i].getIntX(),Piece[i].getIntY(),null);
+				g.drawImage(EnPiece[i].getimgPiece(),EnPiece[i].getIntX(),EnPiece[i].getIntY(),null);
+				if(i==12) {
+					g.drawImage(Piece[i].getimgPiece(),10,intDisplayY,null);
+				}else if(i<15 && i!=13) {
+					g.drawImage(Piece[i].getimgPiece(),intDisplayX,intDisplayY,null);
+					intDisplayX=intDisplayX+92;
+				}
+				g.setColor(Color.GREEN);
+				g.drawString("Ranking from greatest-->lowest",1070,670);
+				g.drawString("*Note: Spy can be killed by piece to the far right",969,690);
 			}
+			intDisplayX=102;
+			
 		} 
 		if(blnDead == true){ 
 			g.setColor(Color.RED);
