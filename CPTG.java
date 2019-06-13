@@ -3,6 +3,8 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
+import java.io.IOException;  
+import java.io.FileWriter; 
 
 //game of the generals, 
 /*TO DO LIST:
@@ -59,6 +61,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 	int intEnDead=0;
 	int intPortNumber=6; 
 	int intPortNumber2=9; 
+	int intScore = 0; 
 	boolean blnStart = false;
 	boolean blnTurn=true;
 	boolean blnWin[] = new boolean[5];
@@ -70,6 +73,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 	String strEnemyX="";
 	String strEnemyY="";
 	String strName="bob"; 
+	String strText; 
 	String strSplit[]=new String [48];
 	StringBuilder strCoordinates = new StringBuilder(21);
 	SuperSocketMaster ssm;
@@ -85,6 +89,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 
 	
 	public void actionPerformed(ActionEvent e) {
+
 		//Get username
 		strName = thename.getText();
 		//port number
@@ -183,13 +188,17 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				ssm2.connect();
 				ssm2.sendText("Start");
 			}
-			/*thepanel.blnConnection2 = false; 
-			thepanel.blnGameboard = true;  
-			blnGame = true; 
-			thepanel.add(thebutton);
-			thepanel.remove(theclientfield); 
-			thepanel.remove(theclientbutton); 
-			blnConnection = false; */
+			//Txt File Name// 
+			String fileName = "Score.txt"; 
+			BufferedWriter score; 
+			try{ 
+				score = new BufferedWriter(new FileWriter("Score.txt",true)); 
+				strText = thename.getText() + ": " +intScore+ "\n";
+				score.append(strText);
+				score.close(); 
+			}catch(IOException p){ 
+				p.printStackTrace(); 
+			}
 		}
 		//ready button
 		if (e.getSource()==thebutton) {
@@ -455,6 +464,16 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 					//ssm2.sendText("Start");
 					System.out.println(ssm.getMyAddress());
 				}
+				String fileName = "Score.txt"; 
+				BufferedWriter score; 
+				try{ 
+					score = new BufferedWriter(new FileWriter("Score.txt",true)); 
+					strText = thename.getText() + ": " +intScore+ "\n";
+					score.append(strText);
+					score.close(); 
+				}catch(IOException p){ 
+					p.printStackTrace(); 
+				}
 				//player is client
 			}else if (e.getX() >= 720 && e.getX() < 1175 && e.getY() >= 390 && e.getY() <= 680){ 
 				
@@ -663,6 +682,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 	public void keyTyped(KeyEvent e) {
 		
 	}
+	
 	
 	public CPTG () {
 		//constructor
