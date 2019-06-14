@@ -20,6 +20,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 	JButton theclientbutton;
 	JButton restartbutton; 
 	JButton quitbutton; 
+	JButton defaultbutton; 
 	JScrollPane thescroll; 
 	JTextField thetextfield;
 	JTextField theclientfield; 
@@ -161,6 +162,8 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 			thepanel.remove(settingsbackbutton);
 			thepanel.remove(portnumber); 
 			thepanel.remove(portnumber2);
+			thepanel.remove(defaultbutton);
+			
 			blnMenu = true;
 		}
 		//client connect button
@@ -427,6 +430,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 				thepanel.add(settingsbackbutton);
 				thepanel.add(portnumber);
 				thepanel.add(portnumber2);
+				thepanel.add(defaultbutton);
 				blnSettings = true;
 				blnMenu = false;
 			}  
@@ -678,7 +682,7 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 		thepanel.addMouseMotionListener(this);
 		thepanel.addKeyListener(this);
 		
-		theframe = new JFrame("Game of Generals 2");
+		theframe = new JFrame("Game of Generals");
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		thebutton = new JButton("Ready!");
@@ -705,6 +709,11 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 		settingsbackbutton.setLocation(980,620); 
 		settingsbackbutton.addActionListener(this);
 		
+		defaultbutton = new JButton ("Default");
+		defaultbutton.setSize(300,100); 
+		defaultbutton.setLocation(110,470);
+		defaultbutton.addActionListener(this);
+		
 		restartbutton = new JButton("Play Again"); 
 		restartbutton.setSize(350,200); 
 		restartbutton.setLocation(69,100); 
@@ -730,12 +739,12 @@ public class CPTG implements ActionListener, MouseMotionListener, MouseListener,
 		thename.setLocation(500,175);
 		thename.addActionListener(this);
 
-		portnumber = new JTextField("6"); 
+		portnumber = new JTextField("1337"); 
 		portnumber.setSize(250,25); 
 		portnumber.setLocation(289,170); 
 		portnumber.addActionListener(this);
 		
-		portnumber2 = new JTextField("9"); 
+		portnumber2 = new JTextField("3000"); 
 		portnumber2.setSize(250,25); 
 		portnumber2.setLocation(289,269); 
 		portnumber2.addActionListener(this);
