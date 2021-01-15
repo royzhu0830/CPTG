@@ -1,0 +1,9 @@
+To run the game, please open the Game of the Generals.jar file.
+
+Everything else is related to pictures and code used to create the game (sorry for the mess)
+
+This game was created in 2019 by 3 high school students.
+
+For help with the rules, please select the help option in the main menu. 
+
+Enjoy!
