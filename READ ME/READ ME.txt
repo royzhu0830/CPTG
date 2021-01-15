@@ -1,4 +1,4 @@
-To run the game, please open the Game of the Generals.jar file.
+To run the game, please open the CPTG.jar file.
 
 Everything else is related to pictures and code used to create the game (sorry for the mess)
 
